@@ -12,7 +12,7 @@ export const GridWrapper = ({children, overrides}) => {
 export const Row = ({children, overrides}) => {
 
     return(
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', flex:1, height:'100%', ...overrides}}>
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', flex:1, ...overrides}}>
             {children}
         </div>
     )

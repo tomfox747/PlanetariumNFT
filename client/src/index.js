@@ -2,9 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { MoralisProvider } from "react-moralis";
-import "./index.css";
-
-/** Get your free Moralis Account https://moralis.io/ */
 
 const APP_ID = "TpFoyJVcbtaOTHJ9vdPal6UbFNQXjnC5VwsCO99j"
 const SERVER_URL = "https://kgxsper7e8l3.usemoralis.com:2053/server"
