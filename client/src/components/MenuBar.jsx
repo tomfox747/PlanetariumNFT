@@ -42,8 +42,8 @@ const AuthenticatedMenu = () => {
     }
 
     return(
-        <GridWrapper overrides={{backgroundColor:'black', height:'80px'}}>
-            <Row overrides={{paddingTop:'5px', paddingBottom:'5px'}}>
+        <GridWrapper >
+            <Row overrides={{paddingTop:'10px',paddingBottom:'10px',backgroundColor:'black', height:'80px'}}>
                 <Col width={1}/>
                 <Col width={4}><ImageWrapper width={'50px'} imageName={'logo'}/></Col>
                 <Col width={1}/>
@@ -87,14 +87,16 @@ const AuthenticatedMenu = () => {
                 </Col>
                 <Col width={3}/>
             </Row>
-            <Switch>
-                <Route exact path="/"><NotConnected/></Route>
-                <Route exact path="/home"></Route>
-                <Route exact path="/explore"><Explore/></Route>
-                <Route exact path="/mynfts"></Route>
-                <Route exact path="/about"></Route>
-                <Route exact path="/contact"></Route>
-            </Switch>
+            <Row>
+                <Switch>
+                    <Route exact path="/"><NotConnected/></Route>
+                    <Route exact path="/home"></Route>
+                    <Route exact path="/explore"><Explore/></Route>
+                    <Route exact path="/mynfts"></Route>
+                    <Route exact path="/about"></Route>
+                    <Route exact path="/contact"></Route>
+                </Switch>
+            </Row>
         </GridWrapper>
     )
 }
