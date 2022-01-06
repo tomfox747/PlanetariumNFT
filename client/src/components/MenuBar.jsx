@@ -3,7 +3,7 @@ import { Switch, Link, Route, useHistory} from 'react-router-dom'
 import { MoralisStore } from 'context/MoralisStore'
 import {GridWrapper, Row, Col} from './shared/Grid'
 import ImageWrapper from './shared/Image'
-import {HeaderTextFontMain, SubTextFontMain, SubTextFontNormal} from './shared/Text'
+import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './shared/Text'
 
 import Explore from 'pages/Explore'
 import NotConnected from 'pages/NotConnected'
@@ -12,7 +12,7 @@ import NftSet from 'pages/NftSet'
 const MenuBar = () => {
     
     const history = useHistory()
-    const {account, isAuthenticated, authenticate, user} = useContext(MoralisStore)
+    const {account} = useContext(MoralisStore)
 
     useEffect(() => {
         if(account === null || account === undefined) history.push('/')
@@ -54,38 +54,30 @@ const AuthenticatedMenu = () => {
                 <Col width={40}/>
                 <Col width={10}>
                     <Link to={"/home"}>
-                        <SubTextFontMain>Home</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>Home</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/Explore"}>
-                        <SubTextFontMain>Explore</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>Explore</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/My NFTs"}>
-                        <SubTextFontMain>My NFTs</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>My NFTs</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/About"}>
-                        <SubTextFontMain>About</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/Contact"}>
-                        <SubTextFontMain>Contact</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>
-                    <div onClick={() => auth()}>
-                        <Row>
-                            <Col width={10} overrides={{marginRight:'10px'}}><SubTextFontMain size={'16px'}>{account ? account.slice(0,10) + '...' : "Not Connected"}</SubTextFontMain></Col>
-                            <Col width={3}><ImageWrapper imageName={'avax'} width={'35px'}/></Col>
-                        </Row>
-                    </div>
-                    
-                </Col>
+                <ConnectionWidget account={account} auth={auth}/>
                 <Col width={3}/>
             </Row>
             <Row>
@@ -103,9 +95,25 @@ const AuthenticatedMenu = () => {
     )
 }
 
+const ConnectionWidget = ({account, auth}) => {
+
+    const [hover, setHover] = useState(false)
+
+    return(
+        <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>
+            <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => auth()} style={{cursor:hover?'pointer':'default'}}>
+                <Row>
+                    <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'16px'}>{account ? account.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
+                    <Col width={3}><ImageWrapper imageName={'avax'} width={'35px'}/></Col>
+                </Row>
+            </div>
+            
+        </Col>
+    )
+}
+
 const UnauthenticatedMenu = () => {
 
-    const history = useHistory()
     const {account, isAuthenticated, authenticate} = useContext(MoralisStore)
 
     const auth = async () => {
@@ -114,8 +122,8 @@ const UnauthenticatedMenu = () => {
     }
 
     return(
-        <GridWrapper overrides={{backgroundColor:'black', height:'80px'}}>
-            <Row overrides={{paddingTop:'5px', paddingBottom:'5px'}}>
+        <GridWrapper>
+            <Row overrides={{backgroundColor:'black', height:'80px', paddingTop:'5px', paddingBottom:'5px'}}>
                 <Col width={1}/>
                 <Col width={4}><ImageWrapper width={'50px'} imageName={'logo'}/></Col>
                 <Col width={1}/>
@@ -125,23 +133,23 @@ const UnauthenticatedMenu = () => {
                 <Col width={40}/>
                 <Col width={10}>
                     <Link to={"/"}>
-                        <SubTextFontMain>Login</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>Login</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/About"}>
-                        <SubTextFontMain>About</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={10}>
                     <Link to={"/Contact"}>
-                        <SubTextFontMain>Contact</SubTextFontMain>
+                        <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>
                     <div onClick={() => auth()}>
                         <Row>
-                            <Col width={10} overrides={{marginRight:'10px'}}><SubTextFontMain size={'16px'}>{isAuthenticated && account ? account.slice(0,10) + '...' : "Not Connected"}</SubTextFontMain></Col>
+                            <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'16px'}>{isAuthenticated && account ? account.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
                             <Col width={3}><ImageWrapper imageName={'avax'} width={'35px'}/></Col>
                         </Row>
                     </div>
@@ -149,11 +157,13 @@ const UnauthenticatedMenu = () => {
                 </Col>
                 <Col width={3}/>
             </Row>
-            <Switch>
-                <Route exact path="/"><NotConnected/></Route>
-                <Route exact path="/about"></Route>
-                <Route exact path="/contact"></Route>
-            </Switch>
+            <Row>
+                <Switch>
+                    <Route exact path="/"><NotConnected/></Route>
+                    <Route exact path="/about"></Route>
+                    <Route exact path="/contact"></Route>
+                </Switch>
+            </Row>
         </GridWrapper>
     )
 }

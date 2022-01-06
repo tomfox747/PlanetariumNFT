@@ -36,7 +36,7 @@ const App = ({ isServerInfo }) => {
   }, [isAuthenticated, isWeb3Enabled]);
 
   return (
-    <div style={{backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>
+    <div style={{backgroundColor:'black', backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>
       <WindowSizeStore.Provider value={{windowSize}}>
         <MoralisStore.Provider value={{isWeb3EnableLoading, isWeb3Enabled, enableWeb3, isAuthenticated, authenticate, account, user}}>
           <Router>
