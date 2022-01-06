@@ -7,6 +7,7 @@ import {HeaderTextFontMain, SubTextFontMain, SubTextFontNormal} from './shared/T
 
 import Explore from 'pages/Explore'
 import NotConnected from 'pages/NotConnected'
+import NftSet from 'pages/NftSet'
 
 const MenuBar = () => {
     
@@ -92,6 +93,7 @@ const AuthenticatedMenu = () => {
                     <Route exact path="/"><NotConnected/></Route>
                     <Route exact path="/home"></Route>
                     <Route exact path="/explore"><Explore/></Route>
+                    <Route exact path="/nftset"><NftSet/></Route>
                     <Route exact path="/mynfts"></Route>
                     <Route exact path="/about"></Route>
                     <Route exact path="/contact"></Route>

@@ -13,7 +13,7 @@ export const HeaderTextFontMain = ({size = 30, overrides, children}) => {
 export const SubTextFontMain = ({size = 20, overrides, children}) => {
 
     return(
-        <div style={{color:'white',...overrides, fontSize:size, fontFamily:'Orbitron',...overrides}}>
+        <div style={{color:'white',...overrides, fontSize:size, fontFamily:'Chakra Petch', fontWeight:'bold', ...overrides}}>
             {children}
         </div>
     )
@@ -22,7 +22,7 @@ export const SubTextFontMain = ({size = 20, overrides, children}) => {
 export const HeaderTextFontNormal = ({size = 24, overrides, children}) => {
 
     return(
-        <div style={{color:'white',...overrides, fontSize:size, fontFamily:'Chakra Petch',...overrides}}>
+        <div style={{color:'white',...overrides, fontSize:size, fontFamily:'Orbitron',...overrides}}>
             {children}
         </div>
     )

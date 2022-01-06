@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import {Link} from 'react-router-dom'
 import Card from './shared/Card'
 import { GridWrapper, Row, Col } from './shared/Grid'
 import Filters from 'components/Filters'
@@ -54,7 +55,7 @@ const Data = ({itemName}) => {
 const Item = ({element}) => {
 
     return(
-        <GridWrapper overrides={{marginTop:'30px', marginBottom:'30px'}}>
+        <GridWrapper overrides={{marginTop:'10px', marginBottom:'30px'}}>
             <Row>
                 <Col width={5}>
                     <Row>
@@ -76,13 +77,15 @@ const Item = ({element}) => {
                             </Row>
                             <Row overrides={{marginTop:'20px'}}>
                                 <Col overrides={{alignItems:'flex-start'}}>
-                                    <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', display:'flex', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
-                                        <Row>
-                                            <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
-                                            <Col><SubTextFontNormal overrides={{fontSize:'15px'}}>View Set</SubTextFontNormal></Col>
-                                            <Col><div style={{ transform:'rotate(-90deg)'}}><ImageWrapper imageName={'arrow'} width={'10px'}/></div></Col>
-                                        </Row>
-                                    </div>
+                                    <Link to={'/nftset'}>
+                                        <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
+                                            <Row>
+                                                <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
+                                                <Col><SubTextFontNormal overrides={{fontSize:'15px'}}>View Set</SubTextFontNormal></Col>
+                                                <Col><div style={{ transform:'rotate(-90deg)'}}><ImageWrapper imageName={'arrow'} width={'10px'}/></div></Col>
+                                            </Row>
+                                        </div>
+                                    </Link>
                                 </Col>
                             </Row>
                         </Col>
