@@ -77,7 +77,7 @@ contract GalaxyNFT is ERC721URIStorage {
     function getMetaData() public view returns(string memory) {return metaData;}
     function getTokenState(uint tokenId) public view returns(tokenState memory){return tokenStates[tokenId];}
     function getMaxSupply() public view returns(uint){return maxSupply;}
-    function getInitialSupply() public view returns(uint){return initialPrice;}
+    function getInitialPrice() public view returns(uint){return initialPrice;}
 
     function getNumberForSale() public view returns(uint){
         uint result = 0;
