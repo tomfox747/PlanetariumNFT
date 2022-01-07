@@ -25,7 +25,11 @@ const mapping  = {
 
 const ImageWrapper = ({overrides, width, imageName}) => {
 
-    return(<div style={{display:'flex', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}><img src={mapping[imageName]} style={{width:width}}/></div>)
+    return(
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}>
+            <img alt='not found' src={mapping[imageName]} style={{width:width}}/>
+        </div>
+    )
 }
 
 export default ImageWrapper

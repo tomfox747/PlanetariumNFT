@@ -2,10 +2,8 @@ import React,{useState} from 'react'
 import {Link} from 'react-router-dom'
 import Card from './shared/Card'
 import { GridWrapper, Row, Col } from './shared/Grid'
-import Filters from 'components/Filters'
 import { HeaderTextFontNormal, SubTextFontNormal } from './shared/Text'
 import ImageWrapper from './shared/Image'
-import Button from './shared/Button'
 
 const ItemType = ({element}) => {
 

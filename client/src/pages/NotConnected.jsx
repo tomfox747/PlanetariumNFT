@@ -2,7 +2,7 @@ import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import React,{useContext} from 'react'
 import Card from 'components/shared/Card'
 import ImageWrapper from 'components/shared/Image'
-import { HeaderTextFontMain, SubTextFontMain, SubTextFontNormal } from 'components/shared/Text'
+import { HeaderTextFontMain, SubTextFontNormal } from 'components/shared/Text'
 import Button from 'components/shared/Button'
 import { MoralisStore } from 'context/MoralisStore'
 

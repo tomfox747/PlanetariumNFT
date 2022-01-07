@@ -1,7 +1,7 @@
 import { GridWrapper } from "components/shared/Grid";
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MenuBar from './components/MenuBar'
 import { MoralisStore } from "context/MoralisStore";
 import { WindowSizeStore } from "context/WindowSizeStore";
@@ -33,7 +33,7 @@ const App = ({ isServerInfo }) => {
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3({ provider: connectorId });
-  }, [isAuthenticated, isWeb3Enabled]);
+  }, [isAuthenticated, isWeb3Enabled, enableWeb3, isWeb3EnableLoading]);
 
   return (
     <div style={{backgroundColor:'black', backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>

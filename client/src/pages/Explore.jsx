@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import Card from 'components/shared/Card'
-import { HeaderTextFontMain, HeaderTextFontNormal, SubTextFontNormal } from 'components/shared/Text'
+import { SubTextFontNormal } from 'components/shared/Text'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import ItemType from 'components/ItemType'
 

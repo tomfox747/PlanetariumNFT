@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { HeaderTextFontNormal, SubTextFontNormal } from './Text'
+import { SubTextFontNormal } from './Text'
 
 const Button = ({func, params, text, overrides, fontSize = '20px'}) => {
 

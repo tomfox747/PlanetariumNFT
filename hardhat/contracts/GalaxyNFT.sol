@@ -21,30 +21,33 @@ contract GalaxyNFT is ERC721URIStorage {
         marketPlace = marketplaceAddress;
         metaData = data;
         initialPrice = price;
-        for(uint i = 0; i < maxSupply; i++){
-            tokenStates[i] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
-            _mint(msg.sender, i);
-            _tokenCounter += 1;
-        }
+        _tokenCounter = 0;
+
+        // mint a single token to the creator
+        tokenStates[_tokenCounter] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
+        _mint(msg.sender, _tokenCounter);
+        setApprovalForAll(marketPlace, true);
+        _tokenCounter += 1;
+
         creator = msg.sender;
         setApprovalForAll(marketPlace, true);
     }
 
     // TOKEN MANAGEMENT ----------------------------------------------------------------------
 
-    // function createToken() public payable returns (uint) {
-    //     require(_tokenCounter < maxSupply, "The NFT has already reached maximum supply");
-    //     require(msg.value == initialPrice, "Not enough Eth was passed");
+    function createToken() public payable returns (uint) {
+        require(_tokenCounter < maxSupply, "The NFT has already reached maximum supply");
+        require(msg.value == initialPrice, "Not enough Eth was passed");
 
-    //     payable(creator).transfer(initialPrice);
-    //     uint newItemId = _tokenCounter;
-    //     tokenStates[newItemId] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
-    //     _mint(msg.sender, newItemId);
-    //     setApprovalForAll(marketPlace, true);
+        payable(creator).transfer(initialPrice);
+        uint newItemId = _tokenCounter;
+        tokenStates[newItemId] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
+        _mint(msg.sender, newItemId);
+        setApprovalForAll(marketPlace, true);
         
-    //     _tokenCounter += 1;
-    //     return newItemId;
-    // }
+        _tokenCounter += 1;
+        return newItemId;
+    }
 
     function setTokenSaleState (uint tokenId, bool saleState) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = saleState;}
     function setTokenPrice(uint tokenId, uint newPrice) public onlyTokenOwner(tokenId) {
@@ -61,7 +64,7 @@ contract GalaxyNFT is ERC721URIStorage {
         payable(creator).transfer(transferFee);
         payable(tokenOwner).transfer(msg.value);
 
-        _transfer(tokenOwner, msg.sender, tokenId);
+        _transfer(payable(tokenOwner), msg.sender, tokenId);
         tokenStates[tokenId] = tokenState(msg.sender, false, totalValue, totalValue, block.timestamp);
     }
 

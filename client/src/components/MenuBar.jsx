@@ -16,7 +16,7 @@ const MenuBar = () => {
 
     useEffect(() => {
         if(account === null || account === undefined) history.push('/')
-    },[account])
+    },[account, history])
 
     if(account !== null && account !== undefined){
         return(
@@ -35,7 +35,7 @@ const AuthenticatedMenu = () => {
     useEffect(() => {
         if(!isAuthenticated) authenticate()
         if(account)history.push('/explore')
-    },[account, isAuthenticated])
+    },[account, isAuthenticated, authenticate, history])
 
     const auth = async () => {
         await authenticate()
