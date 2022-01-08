@@ -4,6 +4,11 @@ import Card from './shared/Card'
 import { GridWrapper, Row, Col } from './shared/Grid'
 import { HeaderTextFontNormal, SubTextFontNormal } from './shared/Text'
 import ImageWrapper from './shared/Image'
+import { useEffect } from 'react/cjs/react.development'
+import { useMoralis } from 'react-moralis'
+import { addresses } from '../contracts/contractAddresses'
+import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
+import GalaxyNFT from '../contracts/abis/GalaxyNFT_milkyway'
 
 const ItemType = ({element}) => {
 
@@ -26,20 +31,29 @@ const ItemType = ({element}) => {
 
 const Data = ({itemName}) => {
 
-    const items = [
-        {title:'Saturn', contractAddress:'0x3h5k3jl23j33hk5fh98a043nt43q899ri', available:14, image:'saturn'},
-        {title:'Mars', contractAddress:'0x3h5k3jl23j33hk5fh98a043nt43q899ri', available:51, image:'mars'},
-        {title:'Earth', contractAddress:'0x3h5k3jl23j33hk5fh98a043nt43q899ri', available:3, image:'earth'},
-        {title:'Earth', contractAddress:'0x3h5k3jl23j33hk5fh98a043nt43q899ri', available:3, image:'earth'}
-    ]
+    const {Moralis, isWeb3Enabled} = useMoralis()
+    const [nftSets, setNftSets] = useState([])
+
+    useEffect(() => {
+        const main = async () =>{
+            let options = {
+                contractAddress: addresses.GalaxyMarketplace,
+                functionName: 'getGalaxies',
+                abi: GalaxyMarketplace.abi
+            }
+            const result = await Moralis.executeFunction(options)
+            setNftSets(result)
+        }
+        if(isWeb3Enabled) main()
+    },[])
 
     return(
         <GridWrapper>
             <Row>
                 <Col>
-                    { items.map((element, index) => {
-                        return <div style={{height:'300px', width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
-                            <Item key={'item'+index} element={element}/>
+                    { nftSets.map((element, index) => {
+                        return <div key={'item'+index} style={{height:'300px', width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
+                            <Item element={element}/>
                         </div>
                     })}
                 </Col>
@@ -50,7 +64,33 @@ const Data = ({itemName}) => {
 
 const Item = ({element}) => {
 
+    const {Moralis} = useMoralis()
+    const [loading, setLoading] = useState(false)
+    const [metaData, setMetaData] = useState({})
+    const [available, setAvailable] = useState(null)
     const [hover, setHover] = useState(false)
+
+    useEffect(() => {
+        const f = async () => {
+            setLoading(true)
+            let getMetaData = {
+                contractAddress: element.nftAddress,
+                functionName: 'getMetaData',
+                abi: GalaxyNFT.abi
+            }
+            let getNumberAvailable = {
+                contractAddress: element.nftAddress,
+                functionName: 'getNumberForSale',
+                abi: GalaxyNFT.abi
+            }
+            const getMetaDataResult = await Moralis.executeFunction(getMetaData)
+            const getAvailableResult = await Moralis.executeFunction(getNumberAvailable)
+            setMetaData(JSON.parse(getMetaDataResult))
+            setAvailable(getAvailableResult)
+            setLoading(false)
+        }
+        f()
+    },[])
 
     return(
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{display:'flex', alignItems:'center', width:'100%', height:'300px',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : ''}}>
@@ -60,7 +100,7 @@ const Item = ({element}) => {
                         <Row>
                             <Col width={1}/>
                             <Col width={15} overrides={{alignItems:'flex-start'}}>
-                                <HeaderTextFontNormal overrides={{textDecoration:'underline'}}>{element.title}</HeaderTextFontNormal>
+                                <HeaderTextFontNormal overrides={{textDecoration:'underline'}}>{metaData.name}</HeaderTextFontNormal>
                             </Col>
                         </Row>
                         <Row overrides={{marginTop:'20px'}}>
@@ -68,11 +108,11 @@ const Item = ({element}) => {
                             <Col width={10}>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>NFT Contract:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.contractAddress}</SubTextFontNormal></Col>
+                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.nftAddress}</SubTextFontNormal></Col>
                                 </Row>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.available} / 100</SubTextFontNormal></Col>
+                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{available} / 100</SubTextFontNormal></Col>
                                 </Row>
                                 <Row overrides={{marginTop:'20px'}}>
                                     <Col overrides={{alignItems:'flex-start'}}>

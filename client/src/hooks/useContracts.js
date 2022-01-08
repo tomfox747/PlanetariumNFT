@@ -1,10 +1,10 @@
 import {useState, useEffect} from 'react'
-import Ethers from 'ethers'
+import {ethers} from 'ethers'
 
-import addresses from '../contracts/contractAddresses'
+import {addresses} from '../contracts/contractAddresses'
 
-import GalaxyMarketPlaceAbi from 'contracts/abis/GalaxyMarketplace.json'
-import GalaxyNFT_MilkywayAbi from 'contracts/abis/GalaxyNFT_milkyway.json'
+import GalaxyMarketPlace from 'contracts/abis/GalaxyMarketplace'
+import GalaxyNFT_Milkyway from 'contracts/abis/GalaxyNFT_milkyway'
 
 // get the contracts and build the functions
 const useContracts = () => {
@@ -15,22 +15,17 @@ const useContracts = () => {
     useEffect(() => {
 
         const buildContracts = () => {
-            
-            let contract = new Ethers.Contract(addresses.GalaxyMarketplace, GalaxyMarketPlaceAbi)
-            let functions = {
-                create: async (nftAddress) => {await contract.functions.createNewGalaxy(nftAddress)},
-                getAll: async () => {await contract.functions.getAllGalaxies()}
-            }
-            setGalaxyMarketplaceContract({functions: functions})
+            let contract = new ethers.Contract(addresses.GalaxyMarketplace, GalaxyMarketPlace.abi)
+            setGalaxyMarketplaceContract(contract)
 
-            contract = new Ethers.Contract(addresses.Galaxy_Milkyway, GalaxyNFT_MilkywayAbi)
-            functions = {
+            contract = new ethers.Contract(addresses.Galaxy_Milkyway, GalaxyNFT_Milkyway.abi)
+            let functions = {
                 create: async () => {await contract.functions.createToken()},
                 setTokenSaleState:async (tokenId, state) => {await contract.functions.setTokenSaleState(tokenId, state)},
                 setTokenPrice:async (tokenId, price) => {await contract.functions.setTokenPrice(tokenId, price)},
                 purchaseToken:async (tokenId) => {await contract.functions.purchaseToken(tokenId)},
                 getMetaData:async () => {await contract.functions.getMetaData()},
-                getTokenState:async (tokenId) => {await contract.functions.getTokenState(tokenId)},
+                getfTokenState:async (tokenId) => {await contract.functions.getTokenState(tokenId)},
                 getMaxSupply:async () => {await contract.functions.getMaxSupply()},
                 getInitialPrice:async () => {await contract.functions.getInitialPrice()},
                 getNumberForSale:async () => {await contract.functions.getNumberForSale()},
@@ -39,7 +34,7 @@ const useContracts = () => {
             setGalaxyNFT_milkywayContract({functions:functions})
         }
         buildContracts()
-    })
+    },[])
 
     return{
         galaxyMarketplaceContract,

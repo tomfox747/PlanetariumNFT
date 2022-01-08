@@ -1,4 +1,4 @@
-export const data = {
+{
   "_format": "hh-sol-artifact-1",
   "contractName": "GalaxyMarketplace",
   "sourceName": "contracts/GalaxyMarketplace.sol",
