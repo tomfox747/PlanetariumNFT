@@ -3,12 +3,7 @@ const hre = require("hardhat");
 
 //Configuration -----------------------------------------------------------
 const NFTaddress = "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f"
-const metaData = {
-    imageId:'milkyway',
-    type:"Galaxy",
-    name:"Milky Way",
-    description:"The Milky Way is a large barred spiral galaxy. All the stars we see in the night sky are in our own Milky Way Galaxy. Our galaxy is called the Milky Way because it appears as a milky band of light in the sky when you see it in a really dark area."
-}
+const price = "1300000000000000000"
 //Configuration -----------------------------------------------------------
 
 
@@ -22,7 +17,7 @@ const formatter = () => {
 const main = async () => {
 
     const nft = await hre.ethers.getContractAt("GalaxyNFT", NFTaddress);
-    let result = await nft.functions.setMetaData(JSON.stringify(metaData))
+    let result = await nft.functions.setTokenPrice(0, price)
     console.log(result)
 
     formatter()

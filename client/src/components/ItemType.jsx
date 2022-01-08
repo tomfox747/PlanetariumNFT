@@ -37,7 +37,7 @@ const Data = ({itemName}) => {
     useEffect(() => {
         const main = async () =>{
             let options = {
-                contractAddress: addresses.GalaxyMarketplace,
+                contractAddress: addresses.marketPlaces.Galaxy,
                 functionName: 'getGalaxies',
                 abi: GalaxyMarketplace.abi
             }
@@ -108,7 +108,7 @@ const Item = ({element}) => {
                             <Col width={10}>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>NFT Contract:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.nftAddress}</SubTextFontNormal></Col>
+                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.owner}</SubTextFontNormal></Col>
                                 </Row>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
@@ -116,7 +116,7 @@ const Item = ({element}) => {
                                 </Row>
                                 <Row overrides={{marginTop:'20px'}}>
                                     <Col overrides={{alignItems:'flex-start'}}>
-                                        <Link to={'/nftset'}>
+                                        <Link to={{pathname:'/nftset', state: { element: element, metaData: metaData }}}>
                                             <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
                                                 <Row>
                                                     <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
@@ -128,12 +128,11 @@ const Item = ({element}) => {
                                     </Col>
                                 </Row>
                             </Col>
-                            <Col width={3}>
-                                <div>
-                                    <ImageWrapper imageName={element.image} width={'230px'}/>
+                            <Col width={3} overrides={{paddingRight:'5px'}}>
+                                <div style={{border:'solid #6e76e5 0.5px'}}>
+                                    <ImageWrapper imageName={metaData.imageId} width={'350px'}/>
                                 </div>
                             </Col>
-                            <Col width={1}/>
                         </Row>
                     </Col>
                 </Row>
