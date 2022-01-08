@@ -1,5 +1,4 @@
-import React,{useState, useEffect} from 'react'
-import { useMoralis } from 'react-moralis'
+import {useState, useEffect} from 'react'
 import Ethers from 'ethers'
 
 import addresses from '../contracts/contractAddresses'

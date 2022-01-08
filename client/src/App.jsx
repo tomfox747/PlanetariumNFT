@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import MenuBar from './components/MenuBar'
 import { MoralisStore } from "context/MoralisStore";
 import { WindowSizeStore } from "context/WindowSizeStore";
+import useContracts from './hooks/useContracts'
 
 import Background from './assets/background.jpg'
 
@@ -29,6 +30,7 @@ const App = ({ isServerInfo }) => {
 
   const {windowSize} = useWindowSize()
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, authenticate, account, user } = useMoralis();
+  const {galaxyMarketplaceContract, galaxyNFT_milkywayContract} = useContracts()
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
