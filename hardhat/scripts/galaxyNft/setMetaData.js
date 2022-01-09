@@ -1,8 +1,9 @@
 const { getCreate2Address } = require("ethers/lib/utils");
 const hre = require("hardhat");
+const addresses = require('../../contractAddresses')
 
 //Configuration -----------------------------------------------------------
-const NFTaddress = "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f"
+const NFTaddress = addresses.addresses.nfts.Galaxy.milkyWay
 const metaData = {
     imageId:'milkyway',
     type:"Galaxy",

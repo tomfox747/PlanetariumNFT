@@ -2,7 +2,7 @@ const { getCreate2Address } = require("ethers/lib/utils");
 const hre = require("hardhat");
 
 //Configuration -----------------------------------------------------------
-const NFTaddress = "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f"
+const NFTaddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
 //Configuration -----------------------------------------------------------
 
 

@@ -1,7 +1,8 @@
 const hre = require("hardhat");
+const addresses = require('../../contractAddresses')
 
 // CONFIG------------------------------------------------------------------
-const marketplaceAddress = "0x59b670e9fA9D0A427751Af201D676719a970857b"
+const marketplaceAddress = addresses.addresses.marketPlaces.Galaxy
 // CONFIG------------------------------------------------------------------
 
 const formatter = () => {

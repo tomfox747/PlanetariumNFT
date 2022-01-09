@@ -41,6 +41,7 @@ const Data = ({itemName}) => {
                 functionName: 'getGalaxies',
                 abi: GalaxyMarketplace.abi
             }
+            
             const result = await Moralis.executeFunction(options)
             setNftSets(result)
         }
@@ -68,6 +69,7 @@ const Item = ({element}) => {
     const [loading, setLoading] = useState(false)
     const [metaData, setMetaData] = useState({})
     const [available, setAvailable] = useState(null)
+    const [totalSupply, setTotalSupply] = useState(null)
     const [hover, setHover] = useState(false)
 
     useEffect(() => {
@@ -83,10 +85,18 @@ const Item = ({element}) => {
                 functionName: 'getNumberForSale',
                 abi: GalaxyNFT.abi
             }
+            let totalSupply = {
+                contractAddress: element.nftAddress,
+                functionName: 'getTokenCount',
+                abi: GalaxyNFT.abi
+            }
+            debugger
             const getMetaDataResult = await Moralis.executeFunction(getMetaData)
             const getAvailableResult = await Moralis.executeFunction(getNumberAvailable)
+            const totalSupplyResult = await Moralis.executeFunction(totalSupply)
             setMetaData(JSON.parse(getMetaDataResult))
             setAvailable(getAvailableResult)
+            setTotalSupply(totalSupplyResult)
             setLoading(false)
         }
         f()
@@ -114,9 +124,13 @@ const Item = ({element}) => {
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
                                     <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{available} / 100</SubTextFontNormal></Col>
                                 </Row>
+                                <Row>
+                                    <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available To Mint:</SubTextFontNormal></Col>
+                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{100 - totalSupply} / 100</SubTextFontNormal></Col>
+                                </Row>
                                 <Row overrides={{marginTop:'20px'}}>
                                     <Col overrides={{alignItems:'flex-start'}}>
-                                        <Link to={{pathname:'/nftset', state: { element: element, metaData: metaData }}}>
+                                        <Link to={{pathname:'/nftset', state: { element: element, metaData: metaData, totalSupply: totalSupply }}}>
                                             <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
                                                 <Row>
                                                     <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>

@@ -1,12 +1,15 @@
 const { getCreate2Address } = require("ethers/lib/utils");
 const hre = require("hardhat");
+const addresses = require('../../contractAddresses')
 
 //Configuration -----------------------------------------------------------
 const contractName = "GalaxyNFT"
-const marketplaceAddress = "0x59b670e9fA9D0A427751Af201D676719a970857b"
+const marketplaceAddress = addresses.marketPlaces.Galaxy
 const name = "Milky way"
 const symbol = "MLKY"
 const data = {
+    "name":"Milky Way",
+    "imageId":"milkyway",
     "type":"galaxy",
     "description":"The Milky Way is a large barred spiral galaxy. All the stars we see in the night sky are in our own Milky Way Galaxy. Our galaxy is called the Milky Way because it appears as a milky band of light in the sky when you see it in a really dark area.",
     "size":"54325"

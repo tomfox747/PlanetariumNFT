@@ -39,7 +39,7 @@ contract GalaxyNFT is ERC721URIStorage {
         require(_tokenCounter < maxSupply, "The NFT has already reached maximum supply");
         require(msg.value == initialPrice, "Not enough Eth was passed");
 
-        payable(creator).transfer(initialPrice);
+        payable(creator).transfer(msg.value);
         uint newItemId = _tokenCounter;
         tokenStates[newItemId] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
         _mint(msg.sender, newItemId);
@@ -56,13 +56,15 @@ contract GalaxyNFT is ERC721URIStorage {
     }
 
     function purchaseToken (uint tokenId) public payable isForSale(tokenId) {
+        
+        require(msg.value == tokenStates[tokenId].price,"wrong value sent");
 
         address tokenOwner = ownerOf(tokenId);
         uint totalValue = msg.value;
         uint transferFee = (msg.value / 100) * 7;
 
         payable(creator).transfer(transferFee);
-        payable(tokenOwner).transfer(msg.value);
+        payable(tokenOwner).transfer(totalValue - transferFee);
 
         _transfer(payable(tokenOwner), msg.sender, tokenId);
         tokenStates[tokenId] = tokenState(msg.sender, false, totalValue, totalValue, block.timestamp);
@@ -77,6 +79,7 @@ contract GalaxyNFT is ERC721URIStorage {
     function getMetaData() public view returns(string memory) {return metaData;}
     function getTokenState(uint tokenId) public view returns(tokenState memory){return tokenStates[tokenId];}
     function getMaxSupply() public view returns(uint){return maxSupply;}
+    function getTokenCount() public view returns(uint){return _tokenCounter;}
     function getInitialPrice() public view returns(uint){return initialPrice;}
 
     function getNumberForSale() public view returns(uint){

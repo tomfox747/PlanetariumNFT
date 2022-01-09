@@ -1,4 +1,4 @@
-export const addresses = {
+const addresses = {
     marketPlaces: {
         Galaxy : "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         Starts : "0x59b670e9fa9d0a427751af201d676719a970857b",
@@ -28,3 +28,5 @@ export const addresses = {
         }
     }
 }
+
+module.exports = addresses

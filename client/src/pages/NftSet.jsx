@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import Card from '../components/shared/Card'
 import Button from '../components/shared/Button'
 import ImageWrapper from '../components/shared/Image'
-import {HeaderTextFontMain, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
+import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
 import {addresses} from '../contracts/contractAddresses'
 import GalaxyNFT from '../contracts/abis/GalaxyNFT_milkyway'
 import { ethers } from 'ethers'
@@ -41,12 +41,16 @@ const NftSet = () => {
                 </Col>
                 <Col width={15}/>
             </Row>
-            <Row overrides={{marginTop:'20px'}}>
+            <Row overrides={{marginTop:'20px', alignItems:'flex-start'}}>
                 <Col width={1}/>
                 <Col width={20}>
                     {tab === 0 ? <Info metaData={location.state.metaData}/> : <NFTData element={location.state.element}/>}
                 </Col>
-                <Col width={10}/>
+                <Col width={1}/>
+                <Col width={8} overrides={{alignItems:'flex-start', justifyContent:'flex-start'}}>
+                    <MintCard/>
+                </Col>
+                <Col width={1}/>
             </Row>
         </GridWrapper>
     )
@@ -118,20 +122,6 @@ const NFTData = ({element}) => {
         f()
     },[])
 
-    // const data = [
-    //     {number:1, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3', purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:2, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 6.2, PurchasedOn: '04/12/2021', ForSale: false, SalePrice: 12},
-    //     {number:3, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:4, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:5, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:6, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 15, PurchasedOn: '04/12/2021', ForSale: false, SalePrice: 12},
-    //     {number:7, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:8, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    //     {number:9, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 15, PurchasedOn: '04/12/2021', ForSale: false, SalePrice: 12},
-    //     {number:10, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 6.2, PurchasedOn: '04/12/2021', ForSale: false, SalePrice: 12},
-    //     {number:11, owner:'0xbd422490aaAe1F16e14356B9af3c67cb147981B3',purchasePrice: 7, PurchasedOn: '04/12/2021', ForSale: true, SalePrice: 12},
-    // ]
-
     return(
         <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
             <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
@@ -175,7 +165,7 @@ const DataCard = ({data, index}) => {
                 </Row>
                 <Row overrides={{marginTop:'5px'}}>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Purchase Price :</SubTextFontMain></Col>
-                    <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{ethers.utils.formatEther(data.pricePaid)}</SubTextFontNormal></Col>
+                    <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{ethers.utils.formatEther(data.pricePaid)} AVAX</SubTextFontNormal></Col>
                 </Row>
                 <Row overrides={{marginTop:'5px'}}>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Purcahsed On :</SubTextFontMain></Col>
@@ -200,6 +190,60 @@ const DataCard = ({data, index}) => {
                     </Row>
                 }
             </div>
+        </GridWrapper>
+    )
+}
+
+const MintCard = () => {
+
+    const {Moralis} = useMoralis()
+    const [totalSupply, setTotalSupply] = useState(null)
+    const [price, setPrice] = useState(null)
+
+    useEffect(() => {
+        const f = async () => {
+            let tokenCount = {
+                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                functionName: 'getTokenCount',
+                abi: GalaxyNFT.abi,
+            }
+            let _price = {
+                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                functionName: 'getInitialPrice',
+                abi: GalaxyNFT.abi
+            }
+            let tokenCountResult = await Moralis.executeFunction(tokenCount)    
+            let priceResult = await Moralis.executeFunction(_price)
+            setTotalSupply(tokenCountResult)
+            setPrice(ethers.utils.formatEther(priceResult))
+        }
+        f()
+    },[])
+
+    const mint = async () => {
+        let options = {
+            contractAddress: addresses.nfts.Galaxy.milkyWay,
+            functionName: 'createToken',
+            abi: GalaxyNFT.abi,
+            value: ethers.utils.parseEther(price),
+        }
+        await Moralis.executeFunction(options)
+    }
+
+    return(
+        <GridWrapper>
+            <Row>
+                <Col>
+                    <Card overrides={{alignItems:'flex-start'}}>
+                        <div style={{width:'100%'}}>
+                            <HeaderTextFontNormal overrides={{margin:'20px'}}>Mint New NFTs</HeaderTextFontNormal>
+                            <SubTextFontNormal overrides={{marginLeft:'20px', marginTop:'20px', marginBottom:'0px'}}>{100 - totalSupply} of 100 Available to Mint</SubTextFontNormal>
+                            <SubTextFontNormal overrides={{marginLeft:'20px', marginTop:'5px'}}>Mint Price: {price} AVAX</SubTextFontNormal>
+                            <Button func={mint} overrides={{width:'250px',marginLeft:'20px', marginTop:'50px', marginBottom:'50px'}} text={'Mint NFT'}/>
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
         </GridWrapper>
     )
 }
