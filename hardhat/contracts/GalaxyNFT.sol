@@ -13,7 +13,7 @@ contract GalaxyNFT is ERC721URIStorage {
     string metaData;
     uint initialPrice;
 
-    struct tokenState {address owner; bool forSale; uint price; uint pricePaid; uint purchaseDate;}
+    struct tokenState {uint id; address owner; bool forSale; uint price; uint pricePaid; uint purchaseDate;}
 
     mapping(uint => tokenState) tokenStates;
 
@@ -22,14 +22,14 @@ contract GalaxyNFT is ERC721URIStorage {
         metaData = data;
         initialPrice = price;
         _tokenCounter = 0;
+        creator = msg.sender;
 
         // mint a single token to the creator
-        tokenStates[_tokenCounter] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
+        tokenStates[_tokenCounter] = tokenState(_tokenCounter, msg.sender, false, initialPrice, initialPrice, block.timestamp);
         _mint(msg.sender, _tokenCounter);
         setApprovalForAll(marketPlace, true);
         _tokenCounter += 1;
 
-        creator = msg.sender;
         setApprovalForAll(marketPlace, true);
     }
 
@@ -41,8 +41,8 @@ contract GalaxyNFT is ERC721URIStorage {
 
         payable(creator).transfer(msg.value);
         uint newItemId = _tokenCounter;
-        tokenStates[newItemId] = tokenState(msg.sender, false, initialPrice, initialPrice, block.timestamp);
-        _mint(msg.sender, newItemId);
+        tokenStates[newItemId] = tokenState(_tokenCounter, msg.sender, false, initialPrice, initialPrice, block.timestamp);
+        _mint(msg.sender, _tokenCounter);
         setApprovalForAll(marketPlace, true);
         
         _tokenCounter += 1;
@@ -67,7 +67,7 @@ contract GalaxyNFT is ERC721URIStorage {
         payable(tokenOwner).transfer(totalValue - transferFee);
 
         _transfer(payable(tokenOwner), msg.sender, tokenId);
-        tokenStates[tokenId] = tokenState(msg.sender, false, totalValue, totalValue, block.timestamp);
+        tokenStates[tokenId] = tokenState(tokenId, msg.sender, false, totalValue, totalValue, block.timestamp);
     }
 
     // allows meta data URI to be added or udpated at a later date by the creator
@@ -94,12 +94,30 @@ contract GalaxyNFT is ERC721URIStorage {
         tokenState[] memory data = new tokenState[](_tokenCounter);
         for(uint i = 0; i < _tokenCounter; i++){
             tokenState memory itm;
+            itm.id = tokenStates[i].id;
             itm.owner = tokenStates[i].owner;
             itm.forSale = tokenStates[i].forSale;
             itm.price = tokenStates[i].price;
             itm.pricePaid = tokenStates[i].pricePaid;
             itm.purchaseDate = tokenStates[i].purchaseDate;
             data[i] = itm;
+        }
+        return data;
+    }
+
+    function getSenderTokens() public view returns(tokenState[] memory) {
+        tokenState[] memory data = new tokenState[](_tokenCounter);
+        for(uint i = 0; i < _tokenCounter; i++){
+            if(tokenStates[i].owner == msg.sender){
+                tokenState memory itm;
+                itm.id = tokenStates[i].id;
+                itm.owner = tokenStates[i].owner;
+                itm.forSale = tokenStates[i].forSale;
+                itm.price = tokenStates[i].price;
+                itm.pricePaid = tokenStates[i].pricePaid;
+                itm.purchaseDate = tokenStates[i].purchaseDate;
+                data[i] = itm;
+            }
         }
         return data;
     }
