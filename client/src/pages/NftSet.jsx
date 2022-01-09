@@ -84,7 +84,7 @@ const Info = ({metaData}) => {
                             return <SubTextFontNormal overrides={{marginTop:'10px'}} key={'infotitle' + index}>{element}</SubTextFontNormal>
                         })}
                     </Col>
-                    <Col width={10}>
+                    <Col width={10} overrides={{alignItems:'flex-end'}}>
                         <div style={{border:'solid #6e76e5 0.5px'}}>
                             <ImageWrapper imageName={imageId} width={'500px'}/>
                         </div>
@@ -199,6 +199,7 @@ const MintCard = () => {
     const {Moralis} = useMoralis()
     const [totalSupply, setTotalSupply] = useState(null)
     const [price, setPrice] = useState(null)
+    const [mintPrice, setMintPrice] = useState(null)
 
     useEffect(() => {
         const f = async () => {
@@ -212,10 +213,12 @@ const MintCard = () => {
                 functionName: 'getInitialPrice',
                 abi: GalaxyNFT.abi
             }
+            
             let tokenCountResult = await Moralis.executeFunction(tokenCount)    
             let priceResult = await Moralis.executeFunction(_price)
             setTotalSupply(tokenCountResult)
             setPrice(ethers.utils.formatEther(priceResult))
+            setMintPrice(priceResult)
         }
         f()
     },[])
@@ -225,7 +228,7 @@ const MintCard = () => {
             contractAddress: addresses.nfts.Galaxy.milkyWay,
             functionName: 'createToken',
             abi: GalaxyNFT.abi,
-            value: ethers.utils.parseEther(price),
+            msgValue: mintPrice,
         }
         await Moralis.executeFunction(options)
     }

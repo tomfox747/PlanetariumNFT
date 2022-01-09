@@ -41,7 +41,7 @@ contract GalaxyNFT is ERC721URIStorage {
 
         payable(creator).transfer(msg.value);
         uint newItemId = _tokenCounter;
-        tokenStates[newItemId] = tokenState(address(this), false, initialPrice, initialPrice, block.timestamp);
+        tokenStates[newItemId] = tokenState(msg.sender, false, initialPrice, initialPrice, block.timestamp);
         _mint(msg.sender, newItemId);
         setApprovalForAll(marketPlace, true);
         

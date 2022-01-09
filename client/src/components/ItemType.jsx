@@ -90,7 +90,6 @@ const Item = ({element}) => {
                 functionName: 'getTokenCount',
                 abi: GalaxyNFT.abi
             }
-            debugger
             const getMetaDataResult = await Moralis.executeFunction(getMetaData)
             const getAvailableResult = await Moralis.executeFunction(getNumberAvailable)
             const totalSupplyResult = await Moralis.executeFunction(totalSupply)
