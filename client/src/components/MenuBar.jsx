@@ -8,6 +8,8 @@ import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './share
 import Explore from 'pages/Explore'
 import NotConnected from 'pages/NotConnected'
 import NftSet from 'pages/NftSet'
+import MyNfts from 'pages/MyNfts'
+
 
 const MenuBar = () => {
     
@@ -63,7 +65,7 @@ const AuthenticatedMenu = () => {
                     </Link>
                 </Col>
                 <Col width={10}>
-                    <Link to={"/My NFTs"}>
+                    <Link to={"/MyNfts"}>
                         <HeaderTextFontNormal size={20}>My NFTs</HeaderTextFontNormal>
                     </Link>
                 </Col>
@@ -86,7 +88,7 @@ const AuthenticatedMenu = () => {
                     <Route exact path="/home"></Route>
                     <Route exact path="/explore"><Explore/></Route>
                     <Route exact path="/nftset"><NftSet/></Route>
-                    <Route exact path="/mynfts"></Route>
+                    <Route exact path="/mynfts"><MyNfts/></Route>
                     <Route exact path="/about"></Route>
                     <Route exact path="/contact"></Route>
                 </Switch>
