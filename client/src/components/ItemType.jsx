@@ -65,7 +65,7 @@ const Data = ({marketplace, marketplaceAddress}) => {
             <Row>
                 <Col>
                     { nftSets.map((element, index) => {
-                        return <div key={'item'+index} style={{height:'300px', width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
+                        return <div key={'item'+index} style={{ width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
                             <Item nftSet={element}/>
                         </div>
                     })}
@@ -118,8 +118,8 @@ const Item = ({nftSet, nftAbi}) => {
     console.log(metaData.imageId)
 
     return(
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{display:'flex', alignItems:'center', width:'100%', height:'300px',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : ''}}>
-            <GridWrapper overrides={{marginTop:'10px', marginBottom:'30px'}}>
+        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ display:'flex', alignItems:'center', width:'100%',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : '', paddingBottom:'20px'}}>
+            <GridWrapper overrides={{marginTop:'10px'}}>
                 <Row>
                     <Col width={5}>
                         <Row>
