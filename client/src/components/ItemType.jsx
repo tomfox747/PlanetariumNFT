@@ -8,9 +8,21 @@ import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
 import { addresses } from '../contracts/contractAddresses'
 import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT_milkyway'
+import StarMarketplace from '../contracts/abis/StarMarketplace'
+import GalaxyNFT from '../contracts/abis/GalaxyNFT'
+import StarNFT from '../contracts/abis/StarNFT'
 
-const ItemType = ({element}) => {
+const ItemType = ({type}) => {
+
+    const marketplaceMapper = {
+        1: GalaxyMarketplace,
+        2: StarMarketplace  
+    }    
+
+    const addressMapper = {
+        1: addresses.marketPlaces.Galaxy,
+        2: addresses.marketPlaces.Star
+    }
 
     return(
         <GridWrapper>
@@ -18,7 +30,7 @@ const ItemType = ({element}) => {
                 <Col width={1}/>
                 <Col width={27}>
                     <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
-                        <Data/>
+                        <Data marketplace={marketplaceMapper[type.id]} marketplaceAddress={addressMapper[type.id]}/>
                     </Card>
                 </Col>
                 <Col width={1}/>
@@ -29,7 +41,7 @@ const ItemType = ({element}) => {
     )
 }
 
-const Data = ({itemName}) => {
+const Data = ({marketplace, marketplaceAddress}) => {
 
     const {Moralis, isWeb3Enabled} = useMoralis()
     const [nftSets, setNftSets] = useState([])
@@ -37,16 +49,16 @@ const Data = ({itemName}) => {
     useEffect(() => {
         const main = async () =>{
             let options = {
-                contractAddress: addresses.marketPlaces.Galaxy,
-                functionName: 'getGalaxies',
-                abi: GalaxyMarketplace.abi
+                contractAddress: marketplaceAddress,
+                functionName: 'getAll',
+                abi: marketplace.abi
             }
             
             const result = await Moralis.executeFunction(options)
             setNftSets(result)
         }
-        if(isWeb3Enabled) main()
-    },[])
+        if(isWeb3Enabled && addresses) main()
+    },[marketplace])
 
     return(
         <GridWrapper>
@@ -54,7 +66,7 @@ const Data = ({itemName}) => {
                 <Col>
                     { nftSets.map((element, index) => {
                         return <div key={'item'+index} style={{height:'300px', width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
-                            <Item element={element}/>
+                            <Item nftSet={element}/>
                         </div>
                     })}
                 </Col>
@@ -63,7 +75,9 @@ const Data = ({itemName}) => {
     )
 }
 
-const Item = ({element}) => {
+const Item = ({nftSet, nftAbi}) => {
+
+    console.log(nftSet.nftAddress)
 
     const {Moralis} = useMoralis()
     const [loading, setLoading] = useState(false)
@@ -76,17 +90,17 @@ const Item = ({element}) => {
         const f = async () => {
             setLoading(true)
             let getMetaData = {
-                contractAddress: element.nftAddress,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getMetaData',
                 abi: GalaxyNFT.abi
             }
             let getNumberAvailable = {
-                contractAddress: element.nftAddress,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getNumberForSale',
                 abi: GalaxyNFT.abi
             }
             let totalSupply = {
-                contractAddress: element.nftAddress,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getTokenCount',
                 abi: GalaxyNFT.abi
             }
@@ -99,7 +113,9 @@ const Item = ({element}) => {
             setLoading(false)
         }
         f()
-    },[])
+    },[nftSet])
+
+    console.log(metaData.imageId)
 
     return(
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{display:'flex', alignItems:'center', width:'100%', height:'300px',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : ''}}>
@@ -117,7 +133,7 @@ const Item = ({element}) => {
                             <Col width={10}>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>NFT Contract:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{element.owner}</SubTextFontNormal></Col>
+                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{nftSet.nftAddress}</SubTextFontNormal></Col>
                                 </Row>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
@@ -129,7 +145,7 @@ const Item = ({element}) => {
                                 </Row>
                                 <Row overrides={{marginTop:'20px'}}>
                                     <Col overrides={{alignItems:'flex-start'}}>
-                                        <Link to={{pathname:'/nftset', state: { element: element, metaData: metaData, totalSupply: totalSupply }}}>
+                                        <Link to={{pathname:'/nftset', state: { nftSet: nftSet, metaData: metaData, totalSupply: totalSupply }}}>
                                             <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
                                                 <Row>
                                                     <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>

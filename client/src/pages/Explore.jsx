@@ -27,7 +27,7 @@ const Explore = () => {
                 <Col width={20}/>
             </Row>
             <Row overrides={{marginTop:'20px'}}>
-                <Col><ItemType element={tabConfig.find(x => x.id === selectedTab)}/></Col>
+                <Col><ItemType type={tabConfig.find(x => x.id === selectedTab)}/></Col>
             </Row>
         </GridWrapper>
     )

@@ -6,7 +6,7 @@ import Button from 'components/shared/Button'
 import { addresses } from '../contracts/contractAddresses'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT_milkyway'
+import GalaxyNFT from '../contracts/abis/GalaxyNFT'
 import {ethers} from 'ethers'
 
 const tabConfig = [
@@ -36,7 +36,7 @@ const MyNfts = () => {
                 : Nfts.Other
 
             let addressArray = Object.values(NftSets)
-            debugger;
+
             let results = []
             for(let i = 0; i < addressArray.length; i++){
                 let metaData = {

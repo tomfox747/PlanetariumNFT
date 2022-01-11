@@ -29,7 +29,6 @@ const App = ({ isServerInfo }) => {
 
   const {windowSize} = useWindowSize()
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, authenticate, account, user, chainId } = useMoralis();
-  //const {galaxyMarketplaceContract, galaxyNFT_milkywayContract} = useContracts()
 
   console.log(chainId)
 

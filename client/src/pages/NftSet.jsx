@@ -8,14 +8,14 @@ import Button from '../components/shared/Button'
 import ImageWrapper from '../components/shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
 import {addresses} from '../contracts/contractAddresses'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT_milkyway'
+import GalaxyNFT from '../contracts/abis/GalaxyNFT'
 import { ethers } from 'ethers'
 
 const NftSet = () => {
 
     const location = useLocation()
     const [tab, setTab] = useState(0)
-
+    
     return(
         <GridWrapper overrides={{marginTop:'50px'}}>
             <Row>
@@ -44,11 +44,11 @@ const NftSet = () => {
             <Row overrides={{marginTop:'20px', alignItems:'flex-start'}}>
                 <Col width={1}/>
                 <Col width={20}>
-                    {tab === 0 ? <Info metaData={location.state.metaData}/> : <NFTData element={location.state.element}/>}
+                    {tab === 0 ? <Info metaData={location.state.metaData}/> : <NFTData nftSet={location.state.nftSet}/>}
                 </Col>
                 <Col width={1}/>
                 <Col width={8} overrides={{alignItems:'flex-start', justifyContent:'flex-start'}}>
-                    <MintCard/>
+                    <MintCard nftSet={location.state.nftSet}/>
                 </Col>
                 <Col width={1}/>
             </Row>
@@ -104,7 +104,7 @@ const Info = ({metaData}) => {
     )
 }
 
-const NFTData = ({element}) => {
+const NFTData = ({nftSet}) => {
 
     const {Moralis} = useMoralis()
     const [data, setData] = useState(null)
@@ -112,7 +112,7 @@ const NFTData = ({element}) => {
     useEffect(() => {
         const f = async () => {
             let options = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getAllTokens',
                 abi: GalaxyNFT.abi
             }
@@ -194,8 +194,8 @@ const DataCard = ({data, index}) => {
     )
 }
 
-const MintCard = () => {
-
+const MintCard = ({nftSet}) => {
+    console.log(nftSet)
     const {Moralis} = useMoralis()
     const [totalSupply, setTotalSupply] = useState(null)
     const [price, setPrice] = useState(null)
@@ -204,12 +204,12 @@ const MintCard = () => {
     useEffect(() => {
         const f = async () => {
             let tokenCount = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getTokenCount',
                 abi: GalaxyNFT.abi,
             }
             let _price = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: nftSet.nftAddress,
                 functionName: 'getInitialPrice',
                 abi: GalaxyNFT.abi
             }
@@ -225,7 +225,7 @@ const MintCard = () => {
 
     const mint = async () => {
         let options = {
-            contractAddress: addresses.nfts.Galaxy.milkyWay,
+            contractAddress: nftSet.nftAddress,
             functionName: 'createToken',
             abi: GalaxyNFT.abi,
             msgValue: mintPrice,
@@ -239,7 +239,7 @@ const MintCard = () => {
                 <Col>
                     <Card overrides={{alignItems:'flex-start'}}>
                         <div style={{width:'100%'}}>
-                            <HeaderTextFontNormal overrides={{margin:'20px'}}>Mint New NFTs</HeaderTextFontNormal>
+                            <HeaderTextFontNormal overrides={{margin:'20px'}}>Mint New NFT</HeaderTextFontNormal>
                             <SubTextFontNormal overrides={{marginLeft:'20px', marginTop:'20px', marginBottom:'0px'}}>{100 - totalSupply} of 100 Available to Mint</SubTextFontNormal>
                             <SubTextFontNormal overrides={{marginLeft:'20px', marginTop:'5px'}}>Mint Price: {price} AVAX</SubTextFontNormal>
                             <Button func={mint} overrides={{width:'250px',marginLeft:'20px', marginTop:'50px', marginBottom:'50px'}} text={'Mint NFT'}/>

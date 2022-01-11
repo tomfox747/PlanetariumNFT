@@ -4,13 +4,13 @@ import {ethers} from 'ethers'
 import {addresses} from '../contracts/contractAddresses'
 
 import GalaxyMarketPlace from 'contracts/abis/GalaxyMarketplace'
-import GalaxyNFT_Milkyway from 'contracts/abis/GalaxyNFT_milkyway'
+import GalaxyNFT from 'contracts/abis/GalaxyNFT'
 
 // get the contracts and build the functions
 const useContracts = () => {
 
     const [galaxyMarketplaceContract, setGalaxyMarketplaceContract] = useState(null)
-    const [galaxyNFT_milkywayContract, setGalaxyNFT_milkywayContract] = useState(null)
+    const [galaxyNFT, setGalaxyNFT] = useState(null)
 
     useEffect(() => {
 
@@ -18,7 +18,7 @@ const useContracts = () => {
             let contract = new ethers.Contract(addresses.GalaxyMarketplace, GalaxyMarketPlace.abi)
             setGalaxyMarketplaceContract(contract)
 
-            contract = new ethers.Contract(addresses.Galaxy_Milkyway, GalaxyNFT_Milkyway.abi)
+            contract = new ethers.Contract(addresses.Galaxy, GalaxyNFT.abi)
             let functions = {
                 create: async () => {await contract.functions.createToken()},
                 setTokenSaleState:async (tokenId, state) => {await contract.functions.setTokenSaleState(tokenId, state)},
@@ -31,14 +31,14 @@ const useContracts = () => {
                 getNumberForSale:async () => {await contract.functions.getNumberForSale()},
                 getAllTokens:async () => {await contract.functions.getAllTokens()}
             }
-            setGalaxyNFT_milkywayContract({functions:functions})
+            setGalaxyNFT({functions:functions})
         }
         buildContracts()
     },[])
 
     return{
         galaxyMarketplaceContract,
-        galaxyNFT_milkywayContract
+        galaxyNFT
     }
 }
 

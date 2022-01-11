@@ -17,6 +17,14 @@ async function main() {
   console.log("Galaxy marketplace deployed to:", galaxyMarketplace.address);
   formatter()
 
+  const StarMarketplace = await hre.ethers.getContractFactory("StarMarketplace");
+  const starMarketplace = await StarMarketplace.deploy();
+  await starMarketplace.deployed();
+
+  formatter()
+  console.log("Star marketplace deployed to:", starMarketplace.address);
+  formatter()
+
   console.log("completed")
 
   formatter()

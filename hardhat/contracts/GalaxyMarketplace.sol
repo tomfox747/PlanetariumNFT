@@ -32,14 +32,14 @@ contract GalaxyMarketplace is ReentrancyGuard {
     }
 
     // MANAGE GALAXIES
-    function createNewGalaxy (address nftAddress) public onlyOwner{
+    function createNew (address nftAddress) public onlyOwner{
         IGalaxyNFT nft = IGalaxyNFT(nftAddress);
         galaxies[totalGalaxies] = GalaxyItem(totalGalaxies, nftAddress, nft);
         totalGalaxies += 1;
     }
 
     // GETTERS
-    function getGalaxies() public view returns (GalaxyUI[] memory){
+    function getAll() public view returns (GalaxyUI[] memory){
         GalaxyUI[] memory data = new GalaxyUI[](totalGalaxies);
         for (uint i = 0; i < totalGalaxies; i++) {
             GalaxyUI memory itm;
