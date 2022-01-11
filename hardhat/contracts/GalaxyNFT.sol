@@ -49,13 +49,19 @@ contract GalaxyNFT is ERC721URIStorage {
         return newItemId;
     }
 
-    function setTokenSaleState (uint tokenId, bool saleState) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = saleState;}
+
     function setTokenPrice(uint tokenId, uint newPrice) public onlyTokenOwner(tokenId) {
         require(newPrice >= 100,"price set too low");
         tokenStates[tokenId].price = newPrice;
     }
+    function listToken (uint tokenId, uint value) public onlyTokenOwner(tokenId) {
+        tokenStates[tokenId].forSale = true;
+        tokenStates[tokenId].price = value;
+    }
+    function delistToken (uint tokenId) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = false;}
 
-    function purchaseToken (uint tokenId) public payable isForSale(tokenId) {
+
+    function purchaseToken (uint tokenId) public payable isForSale(tokenId) isNotTokenOwner(tokenId) {
         
         require(msg.value == tokenStates[tokenId].price,"wrong value sent");
 
@@ -105,26 +111,10 @@ contract GalaxyNFT is ERC721URIStorage {
         return data;
     }
 
-    function getSenderTokens() public view returns(tokenState[] memory) {
-        tokenState[] memory data = new tokenState[](_tokenCounter);
-        for(uint i = 0; i < _tokenCounter; i++){
-            if(tokenStates[i].owner == msg.sender){
-                tokenState memory itm;
-                itm.id = tokenStates[i].id;
-                itm.owner = tokenStates[i].owner;
-                itm.forSale = tokenStates[i].forSale;
-                itm.price = tokenStates[i].price;
-                itm.pricePaid = tokenStates[i].pricePaid;
-                itm.purchaseDate = tokenStates[i].purchaseDate;
-                data[i] = itm;
-            }
-        }
-        return data;
-    }
-
     // MODIFIERS -----------------------------------------------------------------------------
 
     modifier onlyCreator {require(msg.sender == creator, "only the creator can perform this action");_;}
     modifier onlyTokenOwner (uint tokenId) {require(msg.sender == ownerOf(tokenId), "Only the token owner can perform this action");_;}
+    modifier isNotTokenOwner (uint tokenId) {require(msg.sender != ownerOf(tokenId), "You already own this token");_;}
     modifier isForSale (uint tokenId) {require(tokenStates[tokenId].forSale == true, "This token is not for sale");_;}
 }

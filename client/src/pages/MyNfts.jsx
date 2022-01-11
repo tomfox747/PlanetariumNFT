@@ -20,7 +20,7 @@ const tabConfig = [
 
 const MyNfts = () => {
 
-    const {Moralis} = useMoralis()
+    const {Moralis, account} = useMoralis()
     const [selectedTab, setSelectedTab] = useState(1)
     const [owned, setOwned] = useState([])
     const Nfts = addresses.nfts
@@ -36,17 +36,27 @@ const MyNfts = () => {
                 : Nfts.Other
 
             let addressArray = Object.values(NftSets)
-
+            debugger;
             let results = []
             for(let i = 0; i < addressArray.length; i++){
-                let options = {
+                let metaData = {
                     contractAddress: addressArray[i],
-                    functionName: 'getSenderTokens',
+                    functionName: 'getMetaData',
                     abi: GalaxyNFT.abi
                 }
-                let res = await Moralis.executeFunction(options)
-                for(let x = 0; x < res.length; x++){
-                    results.push(res[x])
+                let tokens = {
+                    contractAddress: addressArray[i],
+                    functionName: 'getAllTokens',
+                    abi: GalaxyNFT.abi
+                }
+                let meta = await Moralis.executeFunction(metaData)
+                let tks = await Moralis.executeFunction(tokens)
+                tks = tks.filter(element => element.owner.toLowerCase() === account.toLowerCase())
+                for(let x = 0; x < tks.length; x++){
+                    results.push({
+                        ...JSON.parse(meta), 
+                        ...tks[x]
+                    })
                 }
             }
             setOwned(results)
@@ -111,29 +121,74 @@ const Tab = ({element, index, selectedTab, setSelectedTab}) => {
 const DataCard = ({data, index}) => {
 
     const {Moralis} = useMoralis()
+    const [salePrice, setSalePrice] = useState('')
 
     const formatDate = () => {
         var date = new Date(data.purchaseDate * 1000).toLocaleDateString("en-UK")
         return date
     }
-
-    const purchaseNft = async () => {
-        let options = {
-            contractAddress: addresses.nfts.Galaxy.milkyWay,
-            functionName: 'purchaseToken',
-            abi: GalaxyNFT.abi,
-            value: ethers.utils.parseEther(data.price.toString()),
-            params:{
-                tokenId: index.toString()
-            }
-        }
-        await Moralis.executeFunction(options)
-    }
     
+    const salePriceUpdater = (input) => {
+        if(input === '')setSalePrice(input)
+        let reg = new RegExp('^[0-9.]+$');      
+        if(input.split('.').length-1 < 2) if(reg.test(input))setSalePrice(input)        
+    }
+
+    const listNft = async () => {
+        try{
+            let options = {
+                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                functionName: 'listToken',
+                abi: GalaxyNFT.abi,
+                params:{
+                    tokenId: data.id.toString(),
+                    value: ethers.utils.parseEther(salePrice)
+                }
+            }
+            await Moralis.executeFunction(options)
+        }catch(e){
+            alert("An error occured, please check the submitted information")
+        }
+    }
+
+    const delistNft = async () => {
+        try{
+            let options = {
+                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                functionName: 'delistToken',
+                abi: GalaxyNFT.abi,
+                params:{
+                    tokenId: data.id.toString()
+                }
+            }
+        await Moralis.executeFunction(options)
+        }catch(e){
+            alert("An error occured, please check the submitted information")
+        }
+    }
+
+    const udpatePrice = async () => {
+        try{
+            let options = {
+                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                functionName: 'setTokenPrice',
+                abi: GalaxyNFT.abi,
+                params:{
+                    tokenId: data.id.toString(),
+                    newPrice: ethers.utils.parseEther(salePrice)
+                }
+            }
+            await Moralis.executeFunction(options)
+        }catch(e){
+            alert("An error occured, please check the submitted information")
+        }
+    }
+    console.log(data)
     return(
-        <GridWrapper overrides={{minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>
+        <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>
             <div>
-                <Row overrides={{marginTop:'15px'}}><Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{marginLeft:'20px'}}>Item #{index} of 100</SubTextFontMain></Col></Row>
+                <Row overrides={{marginTop:'15px'}}><Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{marginLeft:'20px'}}>{data.name}</SubTextFontMain></Col></Row>
+                <Row overrides={{marginTop:'15px'}}><Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{marginLeft:'20px'}}>Item #{data.id} of 100</SubTextFontMain></Col></Row>
                 <Row overrides={{marginTop:'30px'}}>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Owner :</SubTextFontMain></Col>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{data.owner?.slice(0, 7)}...</SubTextFontNormal></Col>
@@ -149,20 +204,44 @@ const DataCard = ({data, index}) => {
                 <Row overrides={{marginTop:'5px', marginBottom:data.SalePrice === true ? 'none' : '15px'}}>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>For Sale :</SubTextFontMain></Col>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{data.forSale === true ? 'Yes' : 'No'}</SubTextFontNormal></Col>
-                </Row>    
-            </div>
-            <div>
-                {data.forSale === true && <div style={{border:'solid #6e76e5 0.5px'}}></div>}
-                { data.forSale === true &&
-                    <Row overrides={{marginTop:'20px'}}>
-                        <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Sale Price :</SubTextFontMain></Col>
-                        <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{ethers.utils.formatEther(data.price)} | AVAX</SubTextFontNormal></Col>
-                    </Row>
+                </Row>
+                <div style={{border:'solid #6E76E5 0.5px'}}></div>
+                {data.forSale === true &&
+                    <GridWrapper>
+                        <Row overrides={{marginTop:'10px'}}>
+                            <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Sale Price :</SubTextFontMain></Col>
+                            <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{ethers.utils.formatEther(data.price)} | AVAX</SubTextFontNormal></Col>
+                        </Row>
+                        <Row overrides={{marginTop:'10px'}}>
+                            <Col><Button fontSize={'15px'} text={'Update Price'} func={udpatePrice}/></Col>
+                        </Row>
+                        <Row>
+                            <Col overrides={{marginTop:'10px'}}>
+                                <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                                    <input type="text" value={salePrice} placeholder="Price... (AVAX)" style={{width:'190px', height:'30px'}} onChange={(e) => salePriceUpdater(e.target.value)}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <div style={{border:'solid #6E76E5 0.5px', marginTop:'10px'}}></div>
+                        <Row overrides={{ marginTop:'10px'}}>
+                            <Col><Button fontSize={'15px'} text={'De-List NFT'} func={delistNft}/></Col>
+                        </Row>
+                    </GridWrapper>
                 }
-                { data.forSale &&
-                    <Row overrides={{ marginTop:'10px'}}>
-                        <Col overrides={{alignItems:'flex-start', marginLeft:'20px'}}><Button fontSize={'15px'} text={'Purchase'} func={purchaseNft}/></Col>
-                    </Row>
+                {data.forSale === false &&
+                    <GridWrapper>
+                        <Row overrides={{ marginTop:'10px'}}>
+                            <Col><Button fontSize={'15px'} text={'List NFT For Sale'} func={listNft}/></Col>
+                        </Row>
+                        <Row>
+                            <Col overrides={{ marginTop:'10px'}}>
+                                <div>
+                                    <input type="text" value={salePrice} placeholder="Price... (AVAX)" style={{width:'190px', height:'30px'}} onChange={(e) => salePriceUpdater(e.target.value)}/>
+                                </div>
+                            </Col>
+                        </Row>
+                    </GridWrapper>
+                    
                 }
             </div>
         </GridWrapper>
