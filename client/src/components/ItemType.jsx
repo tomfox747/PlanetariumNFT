@@ -14,7 +14,7 @@ const ItemType = ({type}) => {
         <GridWrapper>
             <Row>
                 <Col width={1}/>
-                <Col width={27}>
+                <Col width={50}>
                     <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
                         <Data/>
                     </Card>
@@ -29,7 +29,7 @@ const ItemType = ({type}) => {
 
 const Data = () => {
 
-    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, isWeb3Enabled} = useMoralis()
     const [nftSets, setNftSets] = useState([])
 
@@ -103,22 +103,19 @@ const Item = ({nftSet}) => {
 
     return(
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ display:'flex', alignItems:'center', width:'100%',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : '', paddingBottom:'20px'}}>
-            <GridWrapper overrides={{marginTop:'10px'}}>
+            <GridWrapper overrides={{marginTop:'20px'}}>
                 <Row>
                     <Col width={5}>
                         <Row>
                             <Col width={1}/>
-                            <Col width={15} overrides={{alignItems:'flex-start'}}>
+                            <Col width={3} overrides={{alignItems:'flex-start'}}>
                                 <HeaderTextFontNormal overrides={{textDecoration:'underline'}}>{metaData.name}</HeaderTextFontNormal>
                             </Col>
+                            <Col width={15} overrides={{alignItems:'flex-start'}}><HeaderTextFontNormal size={15}>{nftSet.nftAddress}</HeaderTextFontNormal></Col>
                         </Row>
                         <Row overrides={{marginTop:'20px'}}>
                             <Col width={1}/>
                             <Col width={10}>
-                                <Row>
-                                    <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>NFT Contract:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{nftSet.nftAddress}</SubTextFontNormal></Col>
-                                </Row>
                                 <Row>
                                     <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
                                     <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{available} / 100</SubTextFontNormal></Col>
@@ -129,7 +126,7 @@ const Item = ({nftSet}) => {
                                 </Row>
                                 <Row overrides={{marginTop:'20px'}}>
                                     <Col overrides={{alignItems:'flex-start'}}>
-                                        <Link to={{pathname:'/nftset', state: { nftSet: nftSet, metaData: metaData, totalSupply: totalSupply }}}>
+                                        <Link style={{textDecoration:'none'}} to={{pathname:'/nftset', state: { nftSet: nftSet, metaData: metaData, totalSupply: totalSupply }}}>
                                             <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
                                                 <Row>
                                                     <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
@@ -142,10 +139,9 @@ const Item = ({nftSet}) => {
                                 </Row>
                             </Col>
                             <Col width={3} overrides={{paddingRight:'5px'}}>
-                                <div style={{border:'solid #6e76e5 0.5px'}}>
-                                    <ImageWrapper imageName={metaData.imageId} width={'350px'}/>
-                                </div>
+                                <div><ImageWrapper imageName={metaData.imageId} width={'350px'}/></div>
                             </Col>
+                            <Col width={1}/>
                         </Row>
                     </Col>
                 </Row>

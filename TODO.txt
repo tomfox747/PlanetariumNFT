@@ -1,7 +1,1 @@
-fix putting up for sale to correct addresses
-
 add events to the smart contracts then interact through moralis
-
-use normal ethers workflows to make the wallet connections smoother
-
-listen for account and chain changes

@@ -1,10 +1,10 @@
 import React,{useContext, useEffect, useState} from 'react'
 import { Switch, Link, Route, useHistory} from 'react-router-dom'
-import { MoralisStore } from 'context/MoralisStore'
 import { EthersStore } from 'context/EthersStore'
 import {GridWrapper, Row, Col} from './shared/Grid'
 import ImageWrapper from './shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './shared/Text'
+import { WindowSizeStore } from 'context/WindowSizeStore'
 
 import Explore from 'pages/Explore'
 import NotConnected from 'pages/NotConnected'
@@ -34,6 +34,7 @@ const AuthenticatedMenu = () => {
     
     const history = useHistory()
     const {address, connectWallet} = useContext(EthersStore)
+    const {windowSize} = useContext(WindowSizeStore) 
 
     useEffect(() => {
         if(address === null || address === undefined) {
@@ -42,6 +43,8 @@ const AuthenticatedMenu = () => {
         }
         else{history.push('/explore')}
     },[address, history])
+
+    console.log(windowSize.width)
 
     return(
         <GridWrapper >
@@ -53,28 +56,28 @@ const AuthenticatedMenu = () => {
                 <Col width={1}/>
                 <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'16px'}>NFT</SubTextFontMain></Col>
                 <Col width={40}/>
-                <Col width={10}>
-                    <Link to={"/home"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/home"}>
                         <HeaderTextFontNormal size={20}>Home</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/Explore"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/Explore"}>
                         <HeaderTextFontNormal size={20}>Explore</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/MyNfts"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/MyNfts"}>
                         <HeaderTextFontNormal size={20}>My NFTs</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/About"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/About"}>
                         <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/Contact"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/Contact"}>
                         <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
@@ -116,6 +119,7 @@ const ConnectionWidget = ({account, auth}) => {
 const UnauthenticatedMenu = () => {
 
     const {address, connectWallet} = useContext(EthersStore)
+    const {windowSize} = useContext(WindowSizeStore)
 
     const auth = async() => {
         await connectWallet()
@@ -132,18 +136,18 @@ const UnauthenticatedMenu = () => {
                 <Col width={1}/>
                 <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'16px'}>NFT</SubTextFontMain></Col>
                 <Col width={40}/>
-                <Col width={10}>
-                    <Link to={"/"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/"}>
                         <HeaderTextFontNormal size={20}>Login</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/About"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/About"}>
                         <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={10}>
-                    <Link to={"/Contact"}>
+                <Col width={windowSize.width > 1650 ? 10 : 25}>
+                    <Link style={{textDecoration:'none'}} to={"/Contact"}>
                         <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>

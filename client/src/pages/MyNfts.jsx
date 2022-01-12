@@ -255,6 +255,7 @@ const DataCard = ({data}) => {
                 }
                 {data.forSale === false &&
                     <GridWrapper>
+                        <Row overrides={{ marginTop:'10px'}}><Col><SubTextFontNormal size={12}>This will incur a 7% transfer fee upon sale</SubTextFontNormal></Col></Row>
                         <Row overrides={{ marginTop:'10px'}}>
                             <Col><Button fontSize={'15px'} text={'List NFT For Sale'} func={listNft}/></Col>
                         </Row>
