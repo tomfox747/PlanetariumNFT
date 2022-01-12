@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import Card from 'components/shared/Card'
 import { SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
@@ -6,8 +6,14 @@ import Button from 'components/shared/Button'
 import { addresses } from '../contracts/contractAddresses'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT'
 import {ethers} from 'ethers'
+import { MarketplaceStore } from 'context/MarketplaceStore'
+
+import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
+import StarMarketplace from '../contracts/abis/StarMarketplace'
+
+import GalaxyNFT from '../contracts/abis/GalaxyNFT'
+import StarNFT from '../contracts/abis/StarNFT'
 
 const tabConfig = [
     {id: 1, text:'Galaxies'},
@@ -18,8 +24,24 @@ const tabConfig = [
     {id: 6, text:'Other'}
 ]
 
+const marketplaceMapper = {
+    1: {
+        config: GalaxyMarketplace,
+        address: addresses.marketPlaces.Galaxy,
+        nftConfig: GalaxyNFT,
+        nftAddresses: addresses.nfts.Galaxy
+    },
+    2: {
+        config: StarMarketplace,
+        address: addresses.marketPlaces.Star,
+        nftConfig: StarNFT,
+        nftAddresses: addresses.nfts.Stars
+    }
+}
+
 const MyNfts = () => {
 
+    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, account} = useMoralis()
     const [selectedTab, setSelectedTab] = useState(1)
     const [owned, setOwned] = useState([])
@@ -35,6 +57,8 @@ const MyNfts = () => {
                 : selectedTab === 5 ? Nfts.Constellations
                 : Nfts.Other
 
+            setCurrentMarketplace(marketplaceMapper[selectedTab])
+
             let addressArray = Object.values(NftSets)
 
             let results = []
@@ -42,12 +66,12 @@ const MyNfts = () => {
                 let metaData = {
                     contractAddress: addressArray[i],
                     functionName: 'getMetaData',
-                    abi: GalaxyNFT.abi
+                    abi: currentMarketplace.nftConfig.abi
                 }
                 let tokens = {
                     contractAddress: addressArray[i],
                     functionName: 'getAllTokens',
-                    abi: GalaxyNFT.abi
+                    abi: currentMarketplace.nftConfig.abi
                 }
                 let meta = await Moralis.executeFunction(metaData)
                 let tks = await Moralis.executeFunction(tokens)
@@ -79,7 +103,7 @@ const MyNfts = () => {
                     <Card>
                         <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
                             {owned && owned.map((element, index) => {
-                                return <DataCard key={"nftItem" + index} data={element} index={index}/>
+                                return <DataCard key={"nftItem" + index} data={element}/>
                             })}
                         </div>
                     </Card>
@@ -118,8 +142,9 @@ const Tab = ({element, index, selectedTab, setSelectedTab}) => {
     )
 }
 
-const DataCard = ({data, index}) => {
+const DataCard = ({data}) => {
 
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
     const [salePrice, setSalePrice] = useState('')
 
@@ -136,10 +161,11 @@ const DataCard = ({data, index}) => {
 
     const listNft = async () => {
         try{
+            debugger;
             let options = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: currentMarketplace.nftAddresses[data.imageId],
                 functionName: 'listToken',
-                abi: GalaxyNFT.abi,
+                abi: currentMarketplace.nftConfig.abi,
                 params:{
                     tokenId: data.id.toString(),
                     value: ethers.utils.parseEther(salePrice)
@@ -154,9 +180,9 @@ const DataCard = ({data, index}) => {
     const delistNft = async () => {
         try{
             let options = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: currentMarketplace.nftAddresses[data.imageId],
                 functionName: 'delistToken',
-                abi: GalaxyNFT.abi,
+                abi: currentMarketplace.nftConfig.abi,
                 params:{
                     tokenId: data.id.toString()
                 }
@@ -170,9 +196,9 @@ const DataCard = ({data, index}) => {
     const udpatePrice = async () => {
         try{
             let options = {
-                contractAddress: addresses.nfts.Galaxy.milkyWay,
+                contractAddress: currentMarketplace.nftAddresses[data.imageId],
                 functionName: 'setTokenPrice',
-                abi: GalaxyNFT.abi,
+                abi: currentMarketplace.nftConfig.abi,
                 params:{
                     tokenId: data.id.toString(),
                     newPrice: ethers.utils.parseEther(salePrice)
@@ -183,7 +209,6 @@ const DataCard = ({data, index}) => {
             alert("An error occured, please check the submitted information")
         }
     }
-    console.log(data)
     return(
         <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>
             <div>

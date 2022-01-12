@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import {Link} from 'react-router-dom'
 import Card from './shared/Card'
 import { GridWrapper, Row, Col } from './shared/Grid'
@@ -6,23 +6,9 @@ import { HeaderTextFontNormal, SubTextFontNormal } from './shared/Text'
 import ImageWrapper from './shared/Image'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
-import { addresses } from '../contracts/contractAddresses'
-import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
-import StarMarketplace from '../contracts/abis/StarMarketplace'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT'
-import StarNFT from '../contracts/abis/StarNFT'
+import { MarketplaceStore } from 'context/MarketplaceStore'
 
 const ItemType = ({type}) => {
-
-    const marketplaceMapper = {
-        1: GalaxyMarketplace,
-        2: StarMarketplace  
-    }    
-
-    const addressMapper = {
-        1: addresses.marketPlaces.Galaxy,
-        2: addresses.marketPlaces.Star
-    }
 
     return(
         <GridWrapper>
@@ -30,7 +16,7 @@ const ItemType = ({type}) => {
                 <Col width={1}/>
                 <Col width={27}>
                     <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
-                        <Data marketplace={marketplaceMapper[type.id]} marketplaceAddress={addressMapper[type.id]}/>
+                        <Data/>
                     </Card>
                 </Col>
                 <Col width={1}/>
@@ -41,24 +27,25 @@ const ItemType = ({type}) => {
     )
 }
 
-const Data = ({marketplace, marketplaceAddress}) => {
+const Data = () => {
 
+    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, isWeb3Enabled} = useMoralis()
     const [nftSets, setNftSets] = useState([])
 
     useEffect(() => {
         const main = async () =>{
             let options = {
-                contractAddress: marketplaceAddress,
+                contractAddress: currentMarketplace.address,
                 functionName: 'getAll',
-                abi: marketplace.abi
+                abi: currentMarketplace.config.abi
             }
             
             const result = await Moralis.executeFunction(options)
             setNftSets(result)
         }
-        if(isWeb3Enabled && addresses) main()
-    },[marketplace])
+        if(isWeb3Enabled && currentMarketplace.config) main()
+    },[currentMarketplace])
 
     return(
         <GridWrapper>
@@ -75,10 +62,9 @@ const Data = ({marketplace, marketplaceAddress}) => {
     )
 }
 
-const Item = ({nftSet, nftAbi}) => {
+const Item = ({nftSet}) => {
 
-    console.log(nftSet.nftAddress)
-
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
     const [loading, setLoading] = useState(false)
     const [metaData, setMetaData] = useState({})
@@ -92,17 +78,17 @@ const Item = ({nftSet, nftAbi}) => {
             let getMetaData = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getMetaData',
-                abi: GalaxyNFT.abi
+                abi: currentMarketplace.nftConfig.abi
             }
             let getNumberAvailable = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getNumberForSale',
-                abi: GalaxyNFT.abi
+                abi: currentMarketplace.nftConfig.abi
             }
             let totalSupply = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getTokenCount',
-                abi: GalaxyNFT.abi
+                abi: currentMarketplace.nftConfig.abi
             }
             const getMetaDataResult = await Moralis.executeFunction(getMetaData)
             const getAvailableResult = await Moralis.executeFunction(getNumberAvailable)
@@ -113,9 +99,7 @@ const Item = ({nftSet, nftAbi}) => {
             setLoading(false)
         }
         f()
-    },[nftSet])
-
-    console.log(metaData.imageId)
+    },[nftSet, currentMarketplace])
 
     return(
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ display:'flex', alignItems:'center', width:'100%',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : '', paddingBottom:'20px'}}>

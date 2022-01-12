@@ -5,13 +5,15 @@ import ImageWrapper from 'components/shared/Image'
 import { HeaderTextFontMain, SubTextFontNormal } from 'components/shared/Text'
 import Button from 'components/shared/Button'
 import { MoralisStore } from 'context/MoralisStore'
+import { EthersStore } from 'context/EthersStore'
 
 const NotConnected = () => {
 
-    const {authenticate} = useContext(MoralisStore)
+    //const {authenticate} = useContext(MoralisStore)
+    const {connectWallet} = useContext(EthersStore)
 
     const funct = async () => {
-        await authenticate()
+        await connectWallet()
         window.location.reload()
     }
 

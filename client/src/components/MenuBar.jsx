@@ -1,6 +1,7 @@
 import React,{useContext, useEffect, useState} from 'react'
 import { Switch, Link, Route, useHistory} from 'react-router-dom'
 import { MoralisStore } from 'context/MoralisStore'
+import { EthersStore } from 'context/EthersStore'
 import {GridWrapper, Row, Col} from './shared/Grid'
 import ImageWrapper from './shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './shared/Text'
@@ -14,13 +15,13 @@ import MyNfts from 'pages/MyNfts'
 const MenuBar = () => {
     
     const history = useHistory()
-    const {account} = useContext(MoralisStore)
+    const {address, connectWallet, chain} = useContext(EthersStore)
 
     useEffect(() => {
-        if(account === null || account === undefined) history.push('/')
-    },[account, history])
+        if(address === null || address === undefined || chain !== true) history.push('/')
+    },[address, history, chain])
 
-    if(account !== null && account !== undefined){
+    if(address !== null && address !== undefined && chain === true){
         return(
             <AuthenticatedMenu/>
         )
@@ -32,17 +33,15 @@ const MenuBar = () => {
 const AuthenticatedMenu = () => {
     
     const history = useHistory()
-    const {account, isAuthenticated, authenticate} = useContext(MoralisStore)
+    const {address, connectWallet} = useContext(EthersStore)
 
     useEffect(() => {
-        if(!isAuthenticated) authenticate()
-        if(account)history.push('/explore')
-    },[account, isAuthenticated, authenticate, history])
-
-    const auth = async () => {
-        await authenticate()
-        window.location.reload()
-    }
+        if(address === null || address === undefined) {
+            connectWallet()
+            window.location.reload()
+        }
+        else{history.push('/explore')}
+    },[address, history])
 
     return(
         <GridWrapper >
@@ -79,7 +78,7 @@ const AuthenticatedMenu = () => {
                         <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <ConnectionWidget account={account} auth={auth}/>
+                <ConnectionWidget account={address} auth={connectWallet}/>
                 <Col width={3}/>
             </Row>
             <Row>
@@ -116,10 +115,10 @@ const ConnectionWidget = ({account, auth}) => {
 
 const UnauthenticatedMenu = () => {
 
-    const {account, isAuthenticated, authenticate} = useContext(MoralisStore)
+    const {address, connectWallet} = useContext(EthersStore)
 
-    const auth = async () => {
-        await authenticate()
+    const auth = async() => {
+        await connectWallet()
         window.location.reload()
     }
 
@@ -151,7 +150,7 @@ const UnauthenticatedMenu = () => {
                 <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>
                     <div onClick={() => auth()}>
                         <Row>
-                            <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'16px'}>{isAuthenticated && account ? account.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
+                            <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'16px'}>{ address ? address.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
                             <Col width={3}><ImageWrapper imageName={'avax'} width={'35px'}/></Col>
                         </Row>
                     </div>

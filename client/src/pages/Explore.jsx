@@ -1,8 +1,17 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import Card from 'components/shared/Card'
 import { SubTextFontNormal } from 'components/shared/Text'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import ItemType from 'components/ItemType'
+import { MarketplaceStore } from 'context/MarketplaceStore'
+
+import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
+import StarMarketplace from '../contracts/abis/StarMarketplace'
+
+import GalaxyNFT from '../contracts/abis/GalaxyNFT'
+import StarNFT from '../contracts/abis/StarNFT'
+
+import { addresses } from 'contracts/contractAddresses'
 
 const tabConfig = [
     {id: 1, text:'Galaxies'},
@@ -13,9 +22,27 @@ const tabConfig = [
     {id: 6, text:'Other'}
 ]
 
+const marketplaceMapper = {
+    1: {
+        config: GalaxyMarketplace,
+        address: addresses.marketPlaces.Galaxy,
+        nftConfig: GalaxyNFT
+    },
+    2: {
+        config: StarMarketplace,
+        address: addresses.marketPlaces.Star,
+        nftConfig: StarNFT
+    }
+}
+
 const Explore = () => {
 
+    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const[selectedTab, setSelectedTab] = useState(1)
+
+    useEffect(() => {
+        setCurrentMarketplace(marketplaceMapper[selectedTab])
+    },[selectedTab])
 
     return(
         <GridWrapper overrides={{marginTop:'50px'}}>

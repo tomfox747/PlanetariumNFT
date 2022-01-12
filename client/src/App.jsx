@@ -4,7 +4,12 @@ import { useMoralis } from "react-moralis";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuBar from './components/MenuBar'
 import { MoralisStore } from "context/MoralisStore";
+import { EthersStore } from "context/EthersStore";
 import { WindowSizeStore } from "context/WindowSizeStore";
+import { MarketplaceStore } from "context/MarketplaceStore";
+import useEthers from "hooks/useEthers";
+
+import GalaxyNFT from './contracts/abis/GalaxyNFT'
 
 import Background from './assets/background.jpg'
 
@@ -28,25 +33,21 @@ const useWindowSize = () => {
 const App = ({ isServerInfo }) => {
 
   const {windowSize} = useWindowSize()
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading, authenticate, account, user, chainId } = useMoralis();
-
-  console.log(chainId)
-
-  useEffect(() => {
-    const connectorId = window.localStorage.getItem("connectorId");
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3({ provider: connectorId });
-  }, [isAuthenticated, isWeb3Enabled, enableWeb3, isWeb3EnableLoading]);
+  const {connectWallet, address, chain} = useEthers()
+  const [currentMarketplace, setCurrentMarketplace] = useState({GalaxyNFT})
 
   return (
     <div style={{backgroundColor:'black', backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>
       <WindowSizeStore.Provider value={{windowSize}}>
-        <MoralisStore.Provider value={{isWeb3EnableLoading, isWeb3Enabled, enableWeb3, isAuthenticated, authenticate, account, user}}>
-          <Router>
-            <GridWrapper>
-              <MenuBar/>
-            </GridWrapper>
-          </Router>
-        </MoralisStore.Provider>
+        <EthersStore.Provider value={{connectWallet, address, chain}}>
+          <MarketplaceStore.Provider value={{currentMarketplace, setCurrentMarketplace}}>
+            <Router>
+              <GridWrapper>
+                <MenuBar/>
+              </GridWrapper>
+            </Router>
+          </MarketplaceStore.Provider>
+        </EthersStore.Provider>
       </WindowSizeStore.Provider>
     </div>
   );  

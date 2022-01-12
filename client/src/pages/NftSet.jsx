@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState, useEffect, useContext } from 'react'
 import {useMoralis} from 'react-moralis'
 import { useLocation } from 'react-router'
 import { GridWrapper, Row, Col } from '../components/shared/Grid'
@@ -9,13 +9,15 @@ import ImageWrapper from '../components/shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
 import {addresses} from '../contracts/contractAddresses'
 import GalaxyNFT from '../contracts/abis/GalaxyNFT'
+import StarNFT from '../contracts/abis/StarNFT'
 import { ethers } from 'ethers'
+import { MarketplaceStore } from 'context/MarketplaceStore'
 
 const NftSet = () => {
 
     const location = useLocation()
     const [tab, setTab] = useState(0)
-    
+
     return(
         <GridWrapper overrides={{marginTop:'50px'}}>
             <Row>
@@ -48,7 +50,7 @@ const NftSet = () => {
                 </Col>
                 <Col width={1}/>
                 <Col width={8} overrides={{alignItems:'flex-start', justifyContent:'flex-start'}}>
-                    <MintCard nftSet={location.state.nftSet}/>
+                    <MintCard nftSet={location.state.nftSet} />
                 </Col>
                 <Col width={1}/>
             </Row>
@@ -195,7 +197,8 @@ const DataCard = ({data, index}) => {
 }
 
 const MintCard = ({nftSet}) => {
-    console.log(nftSet)
+    
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
     const [totalSupply, setTotalSupply] = useState(null)
     const [price, setPrice] = useState(null)
@@ -206,12 +209,12 @@ const MintCard = ({nftSet}) => {
             let tokenCount = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getTokenCount',
-                abi: GalaxyNFT.abi,
+                abi: currentMarketplace.nftConfig.abi,
             }
             let _price = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getInitialPrice',
-                abi: GalaxyNFT.abi
+                abi: currentMarketplace.nftConfig.abi
             }
             
             let tokenCountResult = await Moralis.executeFunction(tokenCount)    
@@ -227,7 +230,7 @@ const MintCard = ({nftSet}) => {
         let options = {
             contractAddress: nftSet.nftAddress,
             functionName: 'createToken',
-            abi: GalaxyNFT.abi,
+            abi: currentMarketplace.nftConfig.abi,
             msgValue: mintPrice,
         }
         await Moralis.executeFunction(options)
