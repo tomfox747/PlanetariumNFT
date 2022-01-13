@@ -8,6 +8,8 @@ const MoonNftData = require('./moonNft/createNftSet')
 const ConstellationNftData = require('./constellationNft/createNftSet')
 const OtherNftData = require('./otherNft/createNftSet')
 
+const addresses = require('../contractAddresses_Fuji')
+
 const formatter = () => {
   console.log("")
   console.log("---------------------------------------------------------")
@@ -16,6 +18,12 @@ const formatter = () => {
 
 async function main() {
 
+  const [deployer] = await hre.ethers.getSigners();
+
+  console.log("Deploying contracts with the account:", deployer.address);
+
+  console.log("Account balance:", (await deployer.getBalance()).toString());
+  /*
   const GalaxyMarketplace = await hre.ethers.getContractFactory("GalaxyMarketplace");
   const galaxyMarketplace = await GalaxyMarketplace.deploy();
   await galaxyMarketplace.deployed();
@@ -56,7 +64,23 @@ async function main() {
 
   formatter()
 
+  return
+*/
+  
+  let Marketplace = await hre.ethers.getContractAt("GalaxyMarketplace", addresses.marketPlaces.Galaxy);
+  let item = GalaxyNftData[2]
+  //string memory name, string memory symbol, address marketplaceAddress, string memory data, uint price
+  const GalaxyNFT = await hre.ethers.getContractFactory('GalaxyNFT');
+  const galaxyNft = await GalaxyNFT.deploy(item.name, item.symbol, addresses.marketPlaces.Galaxy, JSON.stringify(item.data), "1000000000000000000");
+  await galaxyNft.deployed();
 
+  console.log(item.name + " deployed to: " + galaxyNft.address)
+
+  await Marketplace.functions.createNew(galaxyNft.address)
+
+  console.log("new market place item created")
+
+  return
   ////// create galaxy nfts
   let marketplace = await hre.ethers.getContractAt("GalaxyMarketplace", galaxyMarketplace.address);
 

@@ -5,7 +5,7 @@ import { useMoralis } from 'react-moralis'
 const localnetId = 31337
 const testnetId = 43113
 const liveId = 43114
-const envChain = localnetId
+const envChain = testnetId
 
 const useEthers = () => {
 

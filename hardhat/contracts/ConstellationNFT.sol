@@ -46,21 +46,21 @@ contract ConstellationNFT is ERC721URIStorage {
         setApprovalForAll(marketPlace, true);
         
         _tokenCounter += 1;
-        emit e_tokenMinted();
+        emit e_tokenMinted("Token Successfully Minted");
     }
 
 
     function setTokenPrice(uint tokenId, uint newPrice) public onlyTokenOwner(tokenId) {
         require(newPrice >= 100,"price set too low");
         tokenStates[tokenId].price = newPrice;
-        emit e_priceUpdated();
+        emit e_priceUpdated("Token Price Updated");
     }
     function listToken (uint tokenId, uint value) public onlyTokenOwner(tokenId) {
         tokenStates[tokenId].forSale = true;
         tokenStates[tokenId].price = value;
-        emit e_tokenListed();
+        emit e_tokenListed("Token Successfully Listed");
     }
-    function delistToken (uint tokenId) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = false; emit e_tokenDelisted();}
+    function delistToken (uint tokenId) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = false; emit e_tokenDelisted("Token Successfully Delisted");}
 
 
     function purchaseToken (uint tokenId) public payable isForSale(tokenId) isNotTokenOwner(tokenId) {
@@ -76,12 +76,12 @@ contract ConstellationNFT is ERC721URIStorage {
 
         _transfer(payable(tokenOwner), msg.sender, tokenId);
         tokenStates[tokenId] = tokenState(tokenId, msg.sender, false, totalValue, totalValue, block.timestamp);
-        emit e_tokenPurchased();
+        emit e_tokenPurchased("Token successfully purchased");
     }
 
     // allows meta data URI to be added or udpated at a later date by the creator
-    function addTokenUri(uint id, string memory tokenURI) public onlyCreator {_setTokenURI(id, tokenURI); emit e_tokenUriAdded();}
-    function setMetaData(string memory data) public onlyCreator {metaData = data; emit e_metaDataUpdated();}
+    function addTokenUri(uint id, string memory tokenURI) public onlyCreator {_setTokenURI(id, tokenURI); emit e_tokenUriAdded("Token URI added");}
+    function setMetaData(string memory data) public onlyCreator {metaData = data; emit e_metaDataUpdated("Token Meta data was updated");}
 
     // GETTERS -------------------------------------------------------------------------------
 
@@ -116,13 +116,13 @@ contract ConstellationNFT is ERC721URIStorage {
 
     // EVENTS --------------------------------------------------------------------------------
 
-    event e_tokenMinted();
-    event e_tokenPurchased();
-    event e_metaDataUpdated();
-    event e_tokenListed();
-    event e_tokenDelisted();
-    event e_priceUpdated();
-    event e_tokenUriAdded();
+    event e_tokenMinted(string message);
+    event e_tokenPurchased(string message);
+    event e_metaDataUpdated(string message);
+    event e_tokenListed(string message);
+    event e_tokenDelisted(string message);
+    event e_priceUpdated(string message);
+    event e_tokenUriAdded(string message);
 
     // MODIFIERS -----------------------------------------------------------------------------
 

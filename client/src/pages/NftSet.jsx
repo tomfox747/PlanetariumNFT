@@ -7,7 +7,6 @@ import Card from '../components/shared/Card'
 import Button from '../components/shared/Button'
 import ImageWrapper from '../components/shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
-import {addresses} from '../contracts/contractAddresses'
 import GalaxyNFT from '../contracts/abis/GalaxyNFT'
 import StarNFT from '../contracts/abis/StarNFT'
 import { ethers } from 'ethers'
@@ -109,6 +108,7 @@ const Info = ({metaData}) => {
 const NFTData = ({nftSet}) => {
 
     const {Moralis} = useMoralis()
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const [data, setData] = useState(null)
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const NFTData = ({nftSet}) => {
             let options = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getAllTokens',
-                abi: GalaxyNFT.abi
+                abi: currentMarketplace.nftConfig.abi
             }
             const result = await Moralis.executeFunction(options)
             setData(result)

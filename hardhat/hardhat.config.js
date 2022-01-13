@@ -18,4 +18,12 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.7",
+  networks: {
+    hardhat: {
+    },
+    Fuji: {
+      url: "https://api.avax-test.network/ext/bc/C/rpc",
+      accounts: ["743c09f73740b00ba471288cd0641006379700d71ca04d3754c03a25a3973763"]
+    }
+  },
 };

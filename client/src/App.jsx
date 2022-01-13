@@ -1,6 +1,6 @@
 import { GridWrapper } from "components/shared/Grid";
 import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisSubscription, useMoralisCloudFunction } from "react-moralis";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuBar from './components/MenuBar'
 import { MoralisStore } from "context/MoralisStore";
@@ -12,6 +12,7 @@ import useEthers from "hooks/useEthers";
 import GalaxyNFT from './contracts/abis/GalaxyNFT'
 
 import Background from './assets/background.jpg'
+import { useContext } from "react/cjs/react.development";
 
 const getWindowDimensions = () => {
   const{innerWidth: width, innerHeight:height} = window;
@@ -35,6 +36,13 @@ const App = ({ isServerInfo }) => {
   const {windowSize} = useWindowSize()
   const {connectWallet, address, chain} = useEthers()
   const [currentMarketplace, setCurrentMarketplace] = useState({GalaxyNFT})
+  //const {useMoralisSubscription} = useMoralis()
+
+  useMoralisSubscription(
+    "e_tokenMinted", q => q, [], {
+      onCreate: () => alert("the galaxy token was minted")
+    }
+  )
 
   return (
     <div style={{backgroundColor:'black', backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>

@@ -19,7 +19,8 @@ import MoonNFT from '../contracts/abis/MoonNFT'
 import ConstellationNFT from '../contracts/abis/ConstellationNFT'
 import OtherNFT from '../contracts/abis/OtherNFT'
 
-import { addresses } from 'contracts/contractAddresses'
+//import { addresses } from 'contracts/contractAddresses'
+import { addresses } from 'contracts/contractAddresses_Fuji'
 
 const tabConfig = [
     {id: 1, text:'Galaxies'},
@@ -36,31 +37,31 @@ const marketplaceMapper = {
         address: addresses.marketPlaces.Galaxy,
         nftConfig: GalaxyNFT
     },
-    2: {
-        config: StarMarketplace,
-        address: addresses.marketPlaces.Star,
-        nftConfig: StarNFT
-    },
-    3: {
-        config: PlanetMarketplace,
-        address: addresses.marketPlaces.Planet,
-        nftConfig: PlanetNFT
-    },
-    4: {
-        config: MoonMarketplace,
-        address: addresses.marketPlaces.Moon,
-        nftConfig: MoonNFT
-    },
-    5: {
-        config: ConstellationMarketplace,
-        address: addresses.marketPlaces.Constellation,
-        nftConfig: ConstellationNFT
-    },
-    6: {
-        config: OtherMarketplace,
-        address: addresses.marketPlaces.Other,
-        nftConfig: OtherNFT
-    }
+    // 2: {
+    //     config: StarMarketplace,
+    //     address: addresses.marketPlaces.Star,
+    //     nftConfig: StarNFT
+    // },
+    // 3: {
+    //     config: PlanetMarketplace,
+    //     address: addresses.marketPlaces.Planet,
+    //     nftConfig: PlanetNFT
+    // },
+    // 4: {
+    //     config: MoonMarketplace,
+    //     address: addresses.marketPlaces.Moon,
+    //     nftConfig: MoonNFT
+    // },
+    // 5: {
+    //     config: ConstellationMarketplace,
+    //     address: addresses.marketPlaces.Constellation,
+    //     nftConfig: ConstellationNFT
+    // },
+    // 6: {
+    //     config: OtherMarketplace,
+    //     address: addresses.marketPlaces.Other,
+    //     nftConfig: OtherNFT
+    // }
 }
 
 const Explore = () => {
