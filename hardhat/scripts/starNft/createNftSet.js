@@ -51,13 +51,6 @@ const data = [
 const price = "1000000000000000000"
 //Configuration -----------------------------------------------------------
 
-
-const formatter = () => {
-    console.log("")
-    console.log("---------------------------------------------------------")
-    console.log("")
-}
-
 const main = async () => {
 
     const marketplace = await hre.ethers.getContractAt("StarMarketplace", marketplaceAddress);
@@ -71,18 +64,18 @@ const main = async () => {
 
       console.log(item.name + " deployed to: " + starNFT.address)
 
-      formatter()
-      
       await marketplace.functions.createNew(starNFT.address)
     }
-    console.log("stars deployed")
+    console.log("stars deployed ---------------------------------------------")
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+// main()
+//   .then(() => process.exit(0))
+//   .catch((error) => {
+//     console.error(error);
+//     process.exit(1);
+//   });
+
+module.exports = data
