@@ -132,6 +132,21 @@ async function main() {
     await marketplace.functions.createNew(constellationNft.address)
   }
 
+  ////// create other nfts
+  marketplace = await hre.ethers.getContractAt("OtherMarketplace", otherMarketplace.address);
+
+  for(let i = 0; i < OtherNftData.length; i++){
+    let item = OtherNftData[i]
+    //string memory name, string memory symbol, address marketplaceAddress, string memory data, uint price
+    const OtherNFT = await hre.ethers.getContractFactory('OtherNFT');
+    const otherNft = await OtherNFT.deploy(item.name, item.symbol, otherMarketplace.address, JSON.stringify(item.data), "1000000000000000000");
+    await otherNft.deployed();
+
+    console.log(item.name + " deployed to: " + otherNft.address)
+
+    await marketplace.functions.createNew(otherNft.address)
+  }
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
