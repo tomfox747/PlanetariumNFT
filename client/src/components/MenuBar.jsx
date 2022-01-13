@@ -44,8 +44,6 @@ const AuthenticatedMenu = () => {
         else{history.push('/explore')}
     },[address, history])
 
-    console.log(windowSize.width)
-
     return(
         <GridWrapper >
             <Row overrides={{paddingTop:'10px',paddingBottom:'10px',backgroundColor:'black', height:'80px'}}>

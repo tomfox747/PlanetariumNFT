@@ -35,7 +35,7 @@ contract PlanetNFT is ERC721URIStorage {
 
     // TOKEN MANAGEMENT ----------------------------------------------------------------------
 
-    function createToken() public payable returns (uint) {
+    function createToken() public payable {
         require(_tokenCounter < maxSupply, "The NFT has already reached maximum supply");
         require(msg.value == initialPrice, "Not enough Eth was passed");
 
@@ -46,19 +46,21 @@ contract PlanetNFT is ERC721URIStorage {
         setApprovalForAll(marketPlace, true);
         
         _tokenCounter += 1;
-        return newItemId;
+        emit e_tokenMinted();
     }
 
 
     function setTokenPrice(uint tokenId, uint newPrice) public onlyTokenOwner(tokenId) {
         require(newPrice >= 100,"price set too low");
         tokenStates[tokenId].price = newPrice;
+        emit e_priceUpdated();
     }
     function listToken (uint tokenId, uint value) public onlyTokenOwner(tokenId) {
         tokenStates[tokenId].forSale = true;
         tokenStates[tokenId].price = value;
+        emit e_tokenListed();
     }
-    function delistToken (uint tokenId) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = false;}
+    function delistToken (uint tokenId) public onlyTokenOwner(tokenId) {tokenStates[tokenId].forSale = false; emit e_tokenDelisted();}
 
 
     function purchaseToken (uint tokenId) public payable isForSale(tokenId) isNotTokenOwner(tokenId) {
@@ -74,11 +76,12 @@ contract PlanetNFT is ERC721URIStorage {
 
         _transfer(payable(tokenOwner), msg.sender, tokenId);
         tokenStates[tokenId] = tokenState(tokenId, msg.sender, false, totalValue, totalValue, block.timestamp);
+        emit e_tokenPurchased();
     }
 
     // allows meta data URI to be added or udpated at a later date by the creator
-    function addTokenUri(uint id, string memory tokenURI) public onlyCreator {_setTokenURI(id, tokenURI);}
-    function setMetaData(string memory data) public onlyCreator {metaData = data;}
+    function addTokenUri(uint id, string memory tokenURI) public onlyCreator {_setTokenURI(id, tokenURI); emit e_tokenUriAdded();}
+    function setMetaData(string memory data) public onlyCreator {metaData = data; emit e_metaDataUpdated();}
 
     // GETTERS -------------------------------------------------------------------------------
 
@@ -110,6 +113,16 @@ contract PlanetNFT is ERC721URIStorage {
         }
         return data;
     }
+
+    // EVENTS --------------------------------------------------------------------------------
+
+    event e_tokenMinted();
+    event e_tokenPurchased();
+    event e_metaDataUpdated();
+    event e_tokenListed();
+    event e_tokenDelisted();
+    event e_priceUpdated();
+    event e_tokenUriAdded();
 
     // MODIFIERS -----------------------------------------------------------------------------
 

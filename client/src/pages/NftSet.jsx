@@ -39,7 +39,7 @@ const NftSet = () => {
                     <Button func={() => setTab(0)} text={'Info'} overrides={{borderRadius:'0px',border:tab === 0 ? 'solid white 0.5px' : 'none'}}/>
                 </Col>
                 <Col width={2}>
-                    <Button func={() => setTab(1)} text={'NFT data'} overrides={{borderRadius:'0px',border:tab === 1 ? 'solid white 0.5px' : 'none'}}/>
+                    <Button func={() => setTab(1)} text={'View NFTs'} overrides={{borderRadius:'0px',border:tab === 1 ? 'solid white 0.5px' : 'none'}}/>
                 </Col>
                 <Col width={15}/>
             </Row>
@@ -128,15 +128,16 @@ const NFTData = ({nftSet}) => {
         <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
             <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
                 {data && data.map((element, index) => {
-                    return <DataCard key={"nftItem" + index} data={element} index={index}/>
+                    return <DataCard key={"nftItem" + index} data={element} nftSet={nftSet}/>
                 })}
             </div>
         </Card>
     )
 }
 
-const DataCard = ({data, index}) => {
+const DataCard = ({data, nftSet}) => {
 
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
 
     const formatDate = () => {
@@ -146,21 +147,23 @@ const DataCard = ({data, index}) => {
 
     const purchaseNft = async () => {
         let options = {
-            contractAddress: addresses.nfts.Galaxy.milkyWay,
+            contractAddress: nftSet.nftAddress,
             functionName: 'purchaseToken',
-            abi: GalaxyNFT.abi,
-            value: ethers.utils.parseEther(data.price.toString()),
+            abi: currentMarketplace.nftConfig.abi,
+            msgValue: data.price,
             params:{
-                tokenId: index.toString()
+                tokenId: data.id
             }
         }
         await Moralis.executeFunction(options)
     }
 
+    console.log(data)
+
     return(
         <GridWrapper overrides={{minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>
             <div>
-                <Row overrides={{marginTop:'15px'}}><Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{marginLeft:'20px'}}>Item #{index} of 100</SubTextFontMain></Col></Row>
+                <Row overrides={{marginTop:'15px'}}><Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{marginLeft:'20px'}}>Item #{data.id} of 100</SubTextFontMain></Col></Row>
                 <Row overrides={{marginTop:'30px'}}>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontMain overrides={{fontSize:'16px', marginLeft:'20px'}}>Owner :</SubTextFontMain></Col>
                     <Col overrides={{alignItems:'flex-start'}}><SubTextFontNormal overrides={{fontSize:'14px'}}>{data.owner.slice(0, 7)}...</SubTextFontNormal></Col>

@@ -1,1 +1,9 @@
-add events to the smart contracts then interact through moralis
+add events to smart contracts
+
+connect to UI
+
+add loading spinners
+
+animate between pages
+
+add background animation
