@@ -7,9 +7,17 @@ import { MarketplaceStore } from 'context/MarketplaceStore'
 
 import GalaxyMarketplace from '../contracts/abis/GalaxyMarketplace'
 import StarMarketplace from '../contracts/abis/StarMarketplace'
+import PlanetMarketplace from '../contracts/abis/PlanetMarketplace'
+import MoonMarketplace from '../contracts/abis/MoonMarketplace'
+import ConstellationMarketplace from '../contracts/abis/ConstellationMarketplace'
+import OtherMarketplace from '../contracts/abis/OtherMarketplace'
 
 import GalaxyNFT from '../contracts/abis/GalaxyNFT'
 import StarNFT from '../contracts/abis/StarNFT'
+import PlanetNFT from '../contracts/abis/PlanetNFT'
+import MoonNFT from '../contracts/abis/MoonNFT'
+import ConstellationNFT from '../contracts/abis/ConstellationNFT'
+import OtherNFT from '../contracts/abis/OtherNFT'
 
 import { addresses } from 'contracts/contractAddresses'
 
@@ -32,6 +40,26 @@ const marketplaceMapper = {
         config: StarMarketplace,
         address: addresses.marketPlaces.Star,
         nftConfig: StarNFT
+    },
+    3: {
+        config: PlanetMarketplace,
+        address: addresses.marketPlaces.Planet,
+        nftConfig: PlanetNFT
+    },
+    4: {
+        config: MoonMarketplace,
+        address: addresses.marketPlaces.Moon,
+        nftConfig: MoonNFT
+    },
+    5: {
+        config: ConstellationMarketplace,
+        address: addresses.marketPlaces.Constellation,
+        nftConfig: ConstellationNFT
+    },
+    6: {
+        config: OtherMarketplace,
+        address: addresses.marketPlaces.Other,
+        nftConfig: OtherNFT
     }
 }
 

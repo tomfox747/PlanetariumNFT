@@ -19,12 +19,25 @@ import Saturn from '../../assets/planets/Saturn.jpg'
 import Mars from '../../assets/planets/mars.jpg'
 import Earth from '../../assets/planets/earth.jpg'
 
+import TheMoon from '../../assets/moon/moon.jpg'
+import Phobos from '../../assets/moon/phobos.jpg'
+import Titan from '../../assets/moon/titan.jpeg'
+
+import Orion from '../../assets/Constellations/orionthehunter.jpg'
+import Capricornus from '../../assets/Constellations/capricornus.jpg'
+import Scorpius from '../../assets/Constellations/Scorpius.jpg'
+
+import HalleysComet from '../../assets/Other/halleyscomet.jpg'
+import Omuamua from '../../assets/Other/oumuamua.jpg'
+import Holmberg15a from '../../assets/Other/holmberg15a.jpg'
+
 const mapping  = {
     'background':Background,
     'avax': AVAX,
     'logo': Logo,
     'metaMask': MetaMask,
     'viewIcon': ViewIcon,
+    'arrow': Arrow,
     'milkyway': MilkyWay,
     'andromeda': Andromeda,
     'messier83': Messier83,
@@ -34,7 +47,15 @@ const mapping  = {
     'saturn': Saturn,
     'mars': Mars,
     'earth': Earth,
-    'arrow': Arrow,
+    'moon': TheMoon,
+    'titan': Titan,
+    'phobos': Phobos,
+    'orion': Orion,
+    'capricornus': Capricornus,
+    'scorpius': Scorpius,
+    'oumuamua': Omuamua,
+    'halleyscomet': HalleysComet,
+    'holmberg15a': Holmberg15a,
 }
 
 const ImageWrapper = ({overrides, width, imageName}) => {
