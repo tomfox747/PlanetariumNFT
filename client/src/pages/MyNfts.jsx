@@ -4,7 +4,7 @@ import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import Card from 'components/shared/Card'
 import { SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
 import Button from 'components/shared/Button'
-import { addresses } from '../contracts/contractAddresses'
+import { addresses } from '../contracts/contractAddresses_Fuji'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
 import {ethers} from 'ethers'
@@ -119,20 +119,11 @@ const MyNfts = () => {
                 }
             }
             setOwned(results)
+            console.log("here")
             setLoading(false)
         }
         f()
     },[selectedTab])
-
-    if(loading === true) {
-        return(
-            <GridWrapper>
-                <Row>
-                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
-                </Row>
-            </GridWrapper>
-        )
-    }
 
     return(
         <GridWrapper>
@@ -147,11 +138,17 @@ const MyNfts = () => {
                 <Col width={1}/>
                 <Col width={5}>
                     <Card>
-                        <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
-                            {owned && owned.map((element, index) => {
-                                return <DataCard key={"nftItem" + index} data={element}/>
-                            })}
-                        </div>
+                        { loading === true
+                        ? <Row>
+                            <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                        </Row>
+                        : (
+                            <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
+                                {owned && owned.map((element, index) => {
+                                    return <DataCard key={"nftItem" + index} data={element}/>
+                                })}
+                            </div>
+                        )}
                     </Card>
                 </Col>
                 <Col width={1}/>

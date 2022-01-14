@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require('dotenv').config()
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -23,7 +24,7 @@ module.exports = {
     },
     Fuji: {
       url: "https://api.avax-test.network/ext/bc/C/rpc",
-      accounts: ["743c09f73740b00ba471288cd0641006379700d71ca04d3754c03a25a3973763"]
+      accounts: [process.env.PRIVATEKEY]
     }
   },
 };
