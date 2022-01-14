@@ -1,4 +1,5 @@
 import React,{useState, useContext} from 'react'
+import { PuffLoader } from 'react-spinners'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import Card from 'components/shared/Card'
 import { SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
@@ -75,12 +76,14 @@ const MyNfts = () => {
 
     const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, account} = useMoralis()
+    const [loading, setLoading] = useState(true)
     const [selectedTab, setSelectedTab] = useState(1)
     const [owned, setOwned] = useState([])
     const Nfts = addresses.nfts
     
     useEffect(() => {
         const f = async () => {
+            setLoading(true)
             let NftSets = 
                 selectedTab === 1 ? Nfts.Galaxy 
                 : selectedTab === 2 ? Nfts.Stars
@@ -116,9 +119,20 @@ const MyNfts = () => {
                 }
             }
             setOwned(results)
+            setLoading(false)
         }
         f()
     },[selectedTab])
+
+    if(loading === true) {
+        return(
+            <GridWrapper>
+                <Row>
+                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                </Row>
+            </GridWrapper>
+        )
+    }
 
     return(
         <GridWrapper>

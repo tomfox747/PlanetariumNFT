@@ -36,13 +36,12 @@ const App = ({ isServerInfo }) => {
   const {windowSize} = useWindowSize()
   const {connectWallet, address, chain} = useEthers()
   const [currentMarketplace, setCurrentMarketplace] = useState({GalaxyNFT})
-  //const {useMoralisSubscription} = useMoralis()
 
-  useMoralisSubscription(
-    "e_tokenMinted", q => q, [], {
-      onCreate: () => alert("the galaxy token was minted")
-    }
-  )
+  // useMoralisSubscription(
+  //   "e_tokenMinted", q => q, [], {
+  //     onCreate: () => alert("the galaxy token was minted")
+  //   }
+  // )
 
   return (
     <div style={{backgroundColor:'black', backgroundImage:`url(${Background})`, height:'100vh', overflow:'hidden', maxHeight:windowSize.height, width:'100%', padding:'0px', margin:'0px'}}>

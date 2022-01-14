@@ -7,10 +7,9 @@ import Card from '../components/shared/Card'
 import Button from '../components/shared/Button'
 import ImageWrapper from '../components/shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain, SubTextFontNormal} from '../components/shared/Text'
-import GalaxyNFT from '../contracts/abis/GalaxyNFT'
-import StarNFT from '../contracts/abis/StarNFT'
 import { ethers } from 'ethers'
 import { MarketplaceStore } from 'context/MarketplaceStore'
+import PuffLoader from 'react-spinners/PuffLoader'	
 
 const NftSet = () => {
 
@@ -110,9 +109,11 @@ const NFTData = ({nftSet}) => {
     const {Moralis} = useMoralis()
     const {currentMarketplace} = useContext(MarketplaceStore)
     const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const f = async () => {
+            setLoading(true)
             let options = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getAllTokens',
@@ -120,9 +121,20 @@ const NFTData = ({nftSet}) => {
             }
             const result = await Moralis.executeFunction(options)
             setData(result)
+            setLoading(false)
         }
         f()
     },[])
+
+    if(loading === true) {
+        return(
+            <GridWrapper>
+                <Row>
+                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                </Row>
+            </GridWrapper>
+        )
+    }
 
     return(
         <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
@@ -157,8 +169,6 @@ const DataCard = ({data, nftSet}) => {
         }
         await Moralis.executeFunction(options)
     }
-
-    console.log(data)
 
     return(
         <GridWrapper overrides={{minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>
@@ -206,9 +216,11 @@ const MintCard = ({nftSet}) => {
     const [totalSupply, setTotalSupply] = useState(null)
     const [price, setPrice] = useState(null)
     const [mintPrice, setMintPrice] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const f = async () => {
+            setLoading(true)
             let tokenCount = {
                 contractAddress: nftSet.nftAddress,
                 functionName: 'getTokenCount',
@@ -225,6 +237,7 @@ const MintCard = ({nftSet}) => {
             setTotalSupply(tokenCountResult)
             setPrice(ethers.utils.formatEther(priceResult))
             setMintPrice(priceResult)
+            setLoading(false)
         }
         f()
     },[])
@@ -237,6 +250,16 @@ const MintCard = ({nftSet}) => {
             msgValue: mintPrice,
         }
         await Moralis.executeFunction(options)
+    }
+
+    if(loading === true) {
+        return(
+            <GridWrapper>
+                <Row>
+                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                </Row>
+            </GridWrapper>
+        )
     }
 
     return(

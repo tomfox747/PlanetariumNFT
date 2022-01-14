@@ -1,4 +1,5 @@
-import React from 'react'
+import React,{useState} from 'react'
+import { PuffLoader } from 'react-spinners'
 
 import Background from '../../assets/background.jpg'
 import AVAX from '../../assets/avax.png'
@@ -60,9 +61,12 @@ const mapping  = {
 
 const ImageWrapper = ({overrides, width, imageName}) => {
 
+    const [loading, setLoading] = useState(true)
+
     return(
         <div style={{display:'flex', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}>
-            <img alt='not found' src={mapping[imageName]} style={{width:width}}/>
+            {loading && <PuffLoader color={'#ffffff'}/>}
+            <img src={mapping[imageName]} style={{width:width, height: loading === true ? '0px' : '100%'}} onLoad={() => setLoading(false)}/>
         </div>
     )
 }

@@ -7,6 +7,7 @@ import ImageWrapper from './shared/Image'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
 import { MarketplaceStore } from 'context/MarketplaceStore'
+import PuffLoader from 'react-spinners/PuffLoader'	
 
 const ItemType = ({type}) => {
 
@@ -32,9 +33,11 @@ const Data = () => {
     const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, isWeb3Enabled} = useMoralis()
     const [nftSets, setNftSets] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const main = async () =>{
+            setLoading(true)
             let options = {
                 contractAddress: currentMarketplace.address,
                 functionName: 'getAll',
@@ -43,9 +46,20 @@ const Data = () => {
             
             const result = await Moralis.executeFunction(options)
             setNftSets(result)
+            setLoading(false)
         }
         if(isWeb3Enabled && currentMarketplace.config) main()
     },[currentMarketplace])
+
+    if(loading === true) {
+        return(
+            <GridWrapper>
+                <Row>
+                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                </Row>
+            </GridWrapper>
+        )
+    }
 
     return(
         <GridWrapper>
@@ -100,6 +114,16 @@ const Item = ({nftSet}) => {
         }
         f()
     },[nftSet, currentMarketplace])
+
+    if(loading === true) {
+        return(
+            <GridWrapper>
+                <Row>
+                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                </Row>
+            </GridWrapper>
+        )
+    }
 
     return(
         <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ display:'flex', alignItems:'center', width:'100%',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : '', paddingBottom:'20px'}}>
