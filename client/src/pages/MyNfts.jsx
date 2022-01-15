@@ -137,7 +137,7 @@ const MyNfts = () => {
             <Row overrides={{marginTop:'10px'}}>
                 <Col width={1}/>
                 <Col width={5}>
-                    <Card>
+                    <Card overrides={{height:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
                         { loading === true
                         ? <Row>
                             <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
@@ -179,7 +179,7 @@ const Tab = ({element, index, selectedTab, setSelectedTab}) => {
     return(
         <div style={{cursor:hover ? 'pointer' : 'default',width:'100%'}} onClick={() => setSelectedTab(element.id)} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <Card overrides={{height:'50px', border: selectedTab === element.id ? 'solid white 0.5px' : hover ? 'solid #6E76E5 0.5px' : 'none', backgroundColor:'rgba(0,0,0,0.7)'}}>
-                <SubTextFontNormal>{element.text}</SubTextFontNormal>
+                <SubTextFontNormal size={16} overrides={{margin:'5px'}}>{element.text}</SubTextFontNormal>
             </Card>
         </div>
     )

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { SubTextFontNormal } from './Text'
 
-const Button = ({func, params, text, overrides, fontSize = '20px'}) => {
+const Button = ({func, params, text, overrides, fontSize = '16px'}) => {
 
     const [hover, setHover] = useState(false)   
 

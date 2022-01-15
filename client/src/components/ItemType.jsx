@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import Card from './shared/Card'
 import { GridWrapper, Row, Col } from './shared/Grid'
 import { HeaderTextFontNormal, SubTextFontNormal } from './shared/Text'
+import Button from './shared/Button'
 import ImageWrapper from './shared/Image'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
@@ -11,24 +12,28 @@ import PuffLoader from 'react-spinners/PuffLoader'
 
 const ItemType = ({type}) => {
 
+    const [filterObject, setFilterObject] = useState({})
+
     return(
         <GridWrapper>
             <Row>
                 <Col width={1}/>
-                <Col width={50}>
-                    <Card overrides={{overflowY:'scroll', maxHeight:'700px'}}>
-                        <Data/>
+                <Col width={40}>
+                    <Card overrides={{minHeight:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
+                        <Data filters={filterObject}/>
                     </Card>
                 </Col>
                 <Col width={1}/>
-                <Col width={12}></Col>
+                <Col width={12} overrides={{alignSelf:'flex-start'}}>
+                    <Filters setFilters={setFilterObject}/>
+                </Col>
                 <Col width={1}/>
             </Row>
         </GridWrapper>
     )
 }
 
-const Data = () => {
+const Data = ({filters}) => {
 
     const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, isWeb3Enabled} = useMoralis()
@@ -43,7 +48,6 @@ const Data = () => {
                 functionName: 'getAll',
                 abi: currentMarketplace.config.abi
             }
-            
             const result = await Moralis.executeFunction(options)
             setNftSets(result)
             setLoading(false)
@@ -65,18 +69,18 @@ const Data = () => {
         <GridWrapper>
             <Row>
                 <Col>
-                    { nftSets.map((element, index) => {
-                        return <div key={'item'+index} style={{ width:'100%', borderBottom:'solid #4F4F4F 0.2px'}}>
-                            <Item nftSet={element}/>
-                        </div>
-                    })}
+                    <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
+                        { nftSets.map((element, index) => {
+                            return <Item key={'item'+index} nftSet={element} filters={filters}/>
+                        })}
+                    </div>
                 </Col>
             </Row>
         </GridWrapper>
     )
 }
 
-const Item = ({nftSet}) => {
+const Item = ({nftSet, filters}) => {
 
     const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
@@ -84,7 +88,7 @@ const Item = ({nftSet}) => {
     const [metaData, setMetaData] = useState({})
     const [available, setAvailable] = useState(null)
     const [totalSupply, setTotalSupply] = useState(null)
-    const [hover, setHover] = useState(false)
+    const [buttonHover, setButtonHover] = useState(false)
 
     useEffect(() => {
         const f = async () => {
@@ -115,6 +119,18 @@ const Item = ({nftSet}) => {
         f()
     },[nftSet, currentMarketplace])
 
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(nftSet.nftAddress);
+        alert('Contract address copied to clipboard')
+    }
+
+    if(filters.name && !metaData?.name?.includes(filters?.name)) {
+        return null
+    }
+
+    //if(metaData?.name?.includes(filters.name)) console.log("true")
+    //else console.log("false")
+
     if(loading === true) {
         return(
             <GridWrapper>
@@ -126,51 +142,116 @@ const Item = ({nftSet}) => {
     }
 
     return(
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ display:'flex', alignItems:'center', width:'100%',backgroundColor:hover ? 'rgba(79,79,79,0.3)' : '', paddingBottom:'20px'}}>
-            <GridWrapper overrides={{marginTop:'20px'}}>
+        <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px', paddingBottom:'10px', backgroundColor:'rgba(0, 0, 0, 0.5)', margin:'20px', border:'solid #6E76E5 0.5px'}}>
+            <div>
                 <Row>
-                    <Col width={5}>
+                    <Col>
+                        <div style={{maxHeight:'200px', minHeight:'200px', overflow:'hidden'}}>
+                            <ImageWrapper imageName={metaData.imageId} width={300}/>
+                        </div>
                         <Row>
                             <Col width={1}/>
-                            <Col width={3} overrides={{alignItems:'flex-start'}}>
-                                <HeaderTextFontNormal overrides={{textDecoration:'underline'}}>{metaData.name}</HeaderTextFontNormal>
-                            </Col>
-                            <Col width={15} overrides={{alignItems:'flex-start'}}><HeaderTextFontNormal size={15}>{nftSet.nftAddress}</HeaderTextFontNormal></Col>
-                        </Row>
-                        <Row overrides={{marginTop:'20px'}}>
-                            <Col width={1}/>
-                            <Col width={10}>
-                                <Row>
-                                    <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available For Purchase:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{available} / 100</SubTextFontNormal></Col>
-                                </Row>
-                                <Row>
-                                    <Col width={5} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>Available To Mint:</SubTextFontNormal></Col>
-                                    <Col width={10} overrides={{alignItems:'flex-start'}}><SubTextFontNormal>{100 - totalSupply} / 100</SubTextFontNormal></Col>
-                                </Row>
-                                <Row overrides={{marginTop:'20px'}}>
-                                    <Col overrides={{alignItems:'flex-start'}}>
-                                        <Link style={{textDecoration:'none'}} to={{pathname:'/nftset', state: { nftSet: nftSet, metaData: metaData, totalSupply: totalSupply }}}>
-                                            <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
-                                                <Row>
-                                                    <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
-                                                    <Col><SubTextFontNormal overrides={{fontSize:'15px'}}>View Set</SubTextFontNormal></Col>
-                                                    <Col><div style={{ transform:'rotate(-90deg)'}}><ImageWrapper imageName={'arrow'} width={'10px'}/></div></Col>
-                                                </Row>
-                                            </div>
-                                        </Link>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col width={3} overrides={{paddingRight:'5px'}}>
-                                <div><ImageWrapper imageName={metaData.imageId} width={'350px'}/></div>
+                            <Col width={30}>
+                                <div style={{border:'solid #6E76E5 0.5px',marginTop:'5px', marginBottom:'5px', width:'100%'}}></div>
+                                <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
+                                    <HeaderTextFontNormal size={18}>{metaData.name}</HeaderTextFontNormal>
+                                </div>
+                                <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
+                                    <SubTextFontNormal size={14}>Available For Purchase: {available}/100</SubTextFontNormal>    
+                                </div>
+                                <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
+                                    <SubTextFontNormal size={14}>Available To Mint {100 - totalSupply}/100</SubTextFontNormal>
+                                </div>
+                                <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
+                                    <Link style={{textDecoration:'none'}} to={{pathname:'/nftset', state: { nftSet: nftSet, metaData: metaData, totalSupply: totalSupply }}}>
+                                        <div style={{display:'flex', paddingLeft:'10px', paddingRight:'10px', justifyContent:'center', alignItems:'center', width:'180px', height:'40px', backgroundColor:'#6E76E5',borderRadius:'5px'}}>
+                                            <Row>
+                                                <Col><div style={{backgroundColor:'#333660', borderRadius:'5px', padding:'1px'}}><ImageWrapper imageName='viewIcon' width={'30px'}/></div></Col>
+                                                <Col><SubTextFontNormal overrides={{fontSize:'15px'}}>View Set</SubTextFontNormal></Col>
+                                                <Col><div style={{ transform:'rotate(-90deg)'}}><ImageWrapper imageName={'arrow'} width={'10px'}/></div></Col>
+                                            </Row>
+                                        </div>
+                                    </Link>
+                                </div>
+                                <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
+                                    <div style={{cursor:buttonHover ? 'pointer' : 'default'}} onClick={() => copyToClipboard()} onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)}>
+                                        <SubTextFontNormal overrides={{fontSize:'13px',textDecoration:'underline'}}>
+                                            Copy NFT address to clipboard
+                                        </SubTextFontNormal>
+                                    </div>
+                                </div>
                             </Col>
                             <Col width={1}/>
                         </Row>
                     </Col>
                 </Row>
+            </div>
+        </GridWrapper>
+    )
+}
+
+const Filters = ({setFilters}) => {
+
+    const [nameValue, setNameValue] = useState('')
+    const [onlyForSale, setOnlyForSale] = useState(false)
+    const [onlyMintable, setOnlyMintable] = useState(false)
+
+    const onFilterSubmission = () => {
+        setFilters({
+            name: nameValue,
+            onlyForSale: onlyForSale,
+            onlyMintable: onlyMintable
+        })
+    }
+
+    const resetFilters = () => {
+        setFilters({})
+        setNameValue('')
+    }
+
+    console.log(onlyForSale)
+
+    return(
+        <Card>
+            <GridWrapper>
+                <Row>
+                    <Col>
+                        <div style={{width:'100%'}}><HeaderTextFontNormal size={20} overrides={{margin:'20px'}}>Filters</HeaderTextFontNormal></div>
+                        <Row overrides={{marginTop:'20px'}}>
+                            <Col width={3}><SubTextFontNormal size={14}>NFT name: </SubTextFontNormal></Col>
+                            <Col width={4} overrides={{marginRight:'5px', marginBottom:'5px'}}>
+                                <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                                    <input type="text" value={nameValue} placeholder="name..." style={{width:'190px', height:'30px'}} onChange={(e) => setNameValue(e.target.value)}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row overrides={{marginTop:'20px'}}>
+                            <Col>
+                                <SubTextFontNormal size={14}>Only show sets which are for sale: </SubTextFontNormal>
+                                <Row>
+                                    <Col overrides={{opacity: onlyMintable ? '1' : '0.4'}}><Button text={'true'} overrides={{width:'80%'}} func={() => setOnlyForSale(true)}/></Col>
+                                    <Col overrides={{opacity: onlyMintable ? '0.4' : '1'}}><Button text={'false'} overrides={{width:'80%'}} func={() => setOnlyForSale(false)}/></Col>
+                                </Row>
+                                <SubTextFontNormal size={14}>Only show sets which can be minted: </SubTextFontNormal>
+                                <Row>
+                                    <Col><Button text={'true'} overrides={{width:'80%'}} func={() => setOnlyForSale(!onlyForSale)}/></Col>
+                                    <Col><Button text={'false'} overrides={{width:'80%'}} func={() => setOnlyMintable(!onlyMintable)}/></Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <div style={{border:'solid #6E76E5 0.5px', width:'100%', marginTop:'30px', marginBottom:'20px'}}></div>
+                <Row>
+                    <Col overrides={{marginBottom:'20px', marginTop:'20px'}}>
+                        <Button overrides={{width:'80%'}} text={"Update Filters"} func={onFilterSubmission} fontSize={15}/>
+                    </Col>
+                    <Col>
+                        <Button overrides={{width:'80%'}} text={"Reset Filters"} func={resetFilters} fontSize={15}/>
+                    </Col>
+                </Row>
             </GridWrapper>
-        </div>
+        </Card>
     )
 }
 

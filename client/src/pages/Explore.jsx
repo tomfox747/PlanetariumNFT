@@ -69,9 +69,7 @@ const Explore = () => {
     const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const[selectedTab, setSelectedTab] = useState(1)
 
-    useEffect(() => {
-        setCurrentMarketplace(marketplaceMapper[selectedTab])
-    },[selectedTab])
+    useEffect(() => {setCurrentMarketplace(marketplaceMapper[selectedTab])},[selectedTab])
 
     return(
         <GridWrapper overrides={{marginTop:'50px'}}>
@@ -83,7 +81,9 @@ const Explore = () => {
                 <Col width={20}/>
             </Row>
             <Row overrides={{marginTop:'20px'}}>
-                <Col><ItemType type={tabConfig.find(x => x.id === selectedTab)}/></Col>
+                <Col>
+                    <ItemType type={tabConfig.find(x => x.id === selectedTab)}/>
+                </Col>
             </Row>
         </GridWrapper>
     )
@@ -111,7 +111,7 @@ const Tab = ({element, index, selectedTab, setSelectedTab}) => {
     return(
         <div style={{cursor:hover ? 'pointer' : 'default',width:'100%'}} onClick={() => setSelectedTab(element.id)} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <Card overrides={{height:'50px', border: selectedTab === element.id ? 'solid white 0.5px' : hover ? 'solid #6E76E5 0.5px' : 'none', backgroundColor:'rgba(0,0,0,0.7)'}}>
-                <SubTextFontNormal>{element.text}</SubTextFontNormal>
+                <SubTextFontNormal size={17} overrides={{margin:'5px'}}>{element.text}</SubTextFontNormal>
             </Card>
         </div>
     )

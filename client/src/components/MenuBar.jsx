@@ -50,33 +50,33 @@ const AuthenticatedMenu = () => {
                 <Col width={1}/>
                 <Col width={4}><ImageWrapper width={'50px'} imageName={'logo'}/></Col>
                 <Col width={1}/>
-                <Col width={7}><HeaderTextFontMain>Planetarium</HeaderTextFontMain></Col>
+                <Col width={7}><HeaderTextFontMain size={27}>Planetarium</HeaderTextFontMain></Col>
                 <Col width={1}/>
-                <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'16px'}>NFT</SubTextFontMain></Col>
+                <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'15px'}>NFT</SubTextFontMain></Col>
                 <Col width={40}/>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/home"}>
-                        <HeaderTextFontNormal size={20}>Home</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>Home</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/Explore"}>
-                        <HeaderTextFontNormal size={20}>Explore</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>Explore</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/MyNfts"}>
-                        <HeaderTextFontNormal size={20}>My NFTs</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>My NFTs</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/About"}>
-                        <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/Contact"}>
-                        <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <ConnectionWidget account={address} auth={connectWallet}/>
@@ -105,7 +105,7 @@ const ConnectionWidget = ({account, auth}) => {
         <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>
             <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => auth()} style={{cursor:hover?'pointer':'default'}}>
                 <Row>
-                    <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'16px'}>{account ? account.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
+                    <Col width={10} overrides={{marginRight:'10px'}}><HeaderTextFontNormal size={'14px'}>{account ? account.slice(0,10) + '...' : "Not Connected"}</HeaderTextFontNormal></Col>
                     <Col width={3}><ImageWrapper imageName={'avax'} width={'35px'}/></Col>
                 </Row>
             </div>
@@ -130,23 +130,23 @@ const UnauthenticatedMenu = () => {
                 <Col width={1}/>
                 <Col width={4}><ImageWrapper width={'50px'} imageName={'logo'}/></Col>
                 <Col width={1}/>
-                <Col width={7}><HeaderTextFontMain>Planetarium</HeaderTextFontMain></Col>
+                <Col width={7}><HeaderTextFontMain >Planetarium</HeaderTextFontMain></Col>
                 <Col width={1}/>
                 <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'16px'}>NFT</SubTextFontMain></Col>
                 <Col width={40}/>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/"}>
-                        <HeaderTextFontNormal size={20}>Login</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>Login</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/About"}>
-                        <HeaderTextFontNormal size={20}>About</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>About</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/Contact"}>
-                        <HeaderTextFontNormal size={20}>Contact</HeaderTextFontNormal>
+                        <HeaderTextFontNormal size={16}>Contact</HeaderTextFontNormal>
                     </Link>
                 </Col>
                 <Col width={15} overrides={{border:'solid white 0.5px', borderRadius:'5px', padding:'5px', flexDirection:'row'}}>

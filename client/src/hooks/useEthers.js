@@ -26,7 +26,6 @@ const useEthers = () => {
 
     useEffect(() => {
         window.ethereum.on('accountsChanged', async (event, accounts) =>  {
-            console.log("address chganged")
             setAddress(accounts)
             window.location.reload()
         })
