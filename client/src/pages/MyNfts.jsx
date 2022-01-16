@@ -120,7 +120,6 @@ const MyNfts = () => {
                 }
             }
             setOwned(results)
-            console.log("here")
             setLoading(false)
         }
         f()
@@ -140,7 +139,7 @@ const MyNfts = () => {
                     <Row overrides={{marginTop:'10px'}}>
                         <Col width={1}/>
                         <Col width={20}>
-                            <Card overrides={{height:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
+                            <Card overrides={{minHeight:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
                                 { loading === true
                                 ? <Row>
                                     <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
@@ -200,7 +199,8 @@ const DataCard = ({data, filters}) => {
     const [salePrice, setSalePrice] = useState('')
 
     //filtering rules
-    //if()
+    if(filters.onlyForSale === true && data.forSale === false) return null
+    if(filters.name && !data?.name?.toLowerCase().includes(filters?.name.toLowerCase())) return null
 
     const formatDate = () => {
         var date = new Date(data.purchaseDate * 1000).toLocaleDateString("en-UK")
