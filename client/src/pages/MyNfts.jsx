@@ -2,7 +2,7 @@ import React,{useState, useContext} from 'react'
 import { PuffLoader } from 'react-spinners'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import Card from 'components/shared/Card'
-import { SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
+import { HeaderTextFontNormal, SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
 import Button from 'components/shared/Button'
 import { addresses } from '../contracts/contractAddresses_Fuji'
 import { useEffect } from 'react/cjs/react.development'
@@ -79,6 +79,7 @@ const MyNfts = () => {
     const [loading, setLoading] = useState(true)
     const [selectedTab, setSelectedTab] = useState(1)
     const [owned, setOwned] = useState([])
+    const [filters, setFilters] = useState({})
     const Nfts = addresses.nfts
     
     useEffect(() => {
@@ -129,29 +130,36 @@ const MyNfts = () => {
         <GridWrapper>
             <Row overrides={{marginTop:'50px'}}>
                 <Col width={1}/>
-                <Col width={5}>
+                <Col width={20}>
                     <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
                 </Col>
                 <Col width={1}/>
             </Row>
-            <Row overrides={{marginTop:'10px'}}>
-                <Col width={1}/>
-                <Col width={5}>
-                    <Card overrides={{height:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
-                        { loading === true
-                        ? <Row>
-                            <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
-                        </Row>
-                        : (
-                            <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
-                                {owned && owned.map((element, index) => {
-                                    return <DataCard key={"nftItem" + index} data={element}/>
-                                })}
-                            </div>
-                        )}
-                    </Card>
+            <Row overrides={{justifyContent:'flex-start'}}>
+                <Col width={10}>
+                    <Row overrides={{marginTop:'10px'}}>
+                        <Col width={1}/>
+                        <Col width={20}>
+                            <Card overrides={{height:'70vh', maxHeight:'70vh', overflowY:'scroll'}}>
+                                { loading === true
+                                ? <Row>
+                                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
+                                </Row>
+                                : (
+                                    <div style={{display:'flex', flexWrap:'wrap', flexBasis:'33.333333%'}}>
+                                        {owned && owned.map((element, index) => {
+                                            return <DataCard key={"nftItem" + index} data={element} filters={filters}/>
+                                        })}
+                                    </div>
+                                )}
+                            </Card>
+                        </Col>
+                        <Col width={1}/>
+                    </Row>
                 </Col>
-                <Col width={1}/>
+                <Col width={3} overrides={{alignSelf:'flex-start', marginRight:'20px', marginTop:'20px'}}>
+                    <Filters setFilters={setFilters}/>
+                </Col>
             </Row>
         </GridWrapper>
     )
@@ -185,11 +193,14 @@ const Tab = ({element, index, selectedTab, setSelectedTab}) => {
     )
 }
 
-const DataCard = ({data}) => {
+const DataCard = ({data, filters}) => {
 
     const {currentMarketplace} = useContext(MarketplaceStore)
     const {Moralis} = useMoralis()
     const [salePrice, setSalePrice] = useState('')
+
+    //filtering rules
+    //if()
 
     const formatDate = () => {
         var date = new Date(data.purchaseDate * 1000).toLocaleDateString("en-UK")
@@ -204,7 +215,6 @@ const DataCard = ({data}) => {
 
     const listNft = async () => {
         try{
-            debugger;
             let options = {
                 contractAddress: currentMarketplace.nftAddresses[data.imageId],
                 functionName: 'listToken',
@@ -314,6 +324,71 @@ const DataCard = ({data}) => {
                 }
             </div>
         </GridWrapper>
+    )
+}
+
+const Filters = ({setFilters}) => {
+
+    const [nameValue, setNameValue] = useState('')
+    const [onlyForSale, setOnlyForSale] = useState(false)
+    const [onlyForSaleHover, setOnlyForSaleHover] = useState(false)
+
+    const onFilterSubmission = () => {
+        setFilters({
+            name: nameValue,
+            onlyForSale: onlyForSale
+        })
+    }
+
+    const resetFilters = () => {
+        setFilters({
+            name: '',
+            onlyForSale: false,
+        })
+        setOnlyForSale(false)
+        setNameValue('')
+    }
+
+    return(
+        <Card>
+            <GridWrapper>
+                <Row>
+                    <Col>
+                        <div style={{width:'100%'}}><HeaderTextFontNormal size={20} overrides={{margin:'20px'}}>Filters</HeaderTextFontNormal></div>
+                        <Row overrides={{marginTop:'20px'}}>
+                            <Col width={3}><SubTextFontNormal size={14}>NFT name: </SubTextFontNormal></Col>
+                            <Col width={4} overrides={{marginRight:'5px', marginBottom:'5px'}}>
+                                <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                                    <input type="text" value={nameValue} placeholder="name..." style={{width:'190px', height:'30px'}} onChange={(e) => setNameValue(e.target.value)}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row overrides={{marginTop:'20px'}}>
+                            <Col>
+                                <Row>
+                                    <Col width={10}><SubTextFontNormal size={14}>Only show NFTs which are for sale: </SubTextFontNormal></Col>
+                                    <Col width={3}><div 
+                                        style={{width:'20px', height:'20px', border:'solid white 0.5px', cursor: onlyForSaleHover ?'pointer':'default', display:'flex', justifyContent:'center', alignItems:'center'}}
+                                        onClick={() => setOnlyForSale(!onlyForSale)}
+                                        onMouseEnter={() => setOnlyForSaleHover(true)}
+                                        onMouseLeave={() => setOnlyForSaleHover(false)}
+                                    >{onlyForSale && <div style={{width:'10px', height:'10px', backgroundColor:'green', borderRadius:'5px'}}></div>}</div></Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <div style={{border:'solid #6E76E5 0.5px', width:'100%', marginTop:'30px', marginBottom:'20px'}}></div>
+                <Row>
+                    <Col overrides={{marginBottom:'20px', marginTop:'20px'}}>
+                        <Button overrides={{width:'80%'}} text={"Update Filters"} func={onFilterSubmission} fontSize={15}/>
+                    </Col>
+                    <Col>
+                        <Button overrides={{width:'80%'}} text={"Reset Filters"} func={resetFilters} fontSize={15}/>
+                    </Col>
+                </Row>
+            </GridWrapper>
+        </Card>
     )
 }
 
