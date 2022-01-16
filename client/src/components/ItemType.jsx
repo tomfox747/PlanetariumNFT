@@ -124,12 +124,11 @@ const Item = ({nftSet, filters}) => {
         alert('Contract address copied to clipboard')
     }
 
-    if(filters.name && !metaData?.name?.includes(filters?.name)) {
-        return null
-    }
+    // filtering rules
+    if(filters.name && !metaData?.name?.toLowerCase().includes(filters?.name.toLowerCase())) return null
+    if(filters.onlyMintable === true && 100 - totalSupply === '0') return null
+    if(filters.onlyForSale === true && available === '0') return null
 
-    //if(metaData?.name?.includes(filters.name)) console.log("true")
-    //else console.log("false")
 
     if(loading === true) {
         return(
@@ -194,7 +193,9 @@ const Filters = ({setFilters}) => {
 
     const [nameValue, setNameValue] = useState('')
     const [onlyForSale, setOnlyForSale] = useState(false)
+    const [onlyForSaleHover, setOnlyForSaleHover] = useState(false)
     const [onlyMintable, setOnlyMintable] = useState(false)
+    const [onlyMintableHover, setOnlyMintableHover] = useState(false)
 
     const onFilterSubmission = () => {
         setFilters({
@@ -205,11 +206,15 @@ const Filters = ({setFilters}) => {
     }
 
     const resetFilters = () => {
-        setFilters({})
+        setFilters({
+            name: '',
+            onlyForSale: false,
+            onlyMintable: false
+        })
+        setOnlyMintable(false)
+        setOnlyForSale(false)
         setNameValue('')
     }
-
-    console.log(onlyForSale)
 
     return(
         <Card>
@@ -227,15 +232,23 @@ const Filters = ({setFilters}) => {
                         </Row>
                         <Row overrides={{marginTop:'20px'}}>
                             <Col>
-                                <SubTextFontNormal size={14}>Only show sets which are for sale: </SubTextFontNormal>
                                 <Row>
-                                    <Col overrides={{opacity: onlyMintable ? '1' : '0.4'}}><Button text={'true'} overrides={{width:'80%'}} func={() => setOnlyForSale(true)}/></Col>
-                                    <Col overrides={{opacity: onlyMintable ? '0.4' : '1'}}><Button text={'false'} overrides={{width:'80%'}} func={() => setOnlyForSale(false)}/></Col>
+                                    <Col width={10}><SubTextFontNormal size={14}>Only show sets which are for sale: </SubTextFontNormal></Col>
+                                    <Col width={3}><div 
+                                        style={{width:'20px', height:'20px', border:'solid white 0.5px', cursor: onlyForSaleHover ?'pointer':'default', display:'flex', justifyContent:'center', alignItems:'center'}}
+                                        onClick={() => setOnlyForSale(!onlyForSale)}
+                                        onMouseEnter={() => setOnlyForSaleHover(true)}
+                                        onMouseLeave={() => setOnlyForSaleHover(false)}
+                                    >{onlyForSale && <div style={{width:'10px', height:'10px', backgroundColor:'green', borderRadius:'5px'}}></div>}</div></Col>
                                 </Row>
-                                <SubTextFontNormal size={14}>Only show sets which can be minted: </SubTextFontNormal>
-                                <Row>
-                                    <Col><Button text={'true'} overrides={{width:'80%'}} func={() => setOnlyForSale(!onlyForSale)}/></Col>
-                                    <Col><Button text={'false'} overrides={{width:'80%'}} func={() => setOnlyMintable(!onlyMintable)}/></Col>
+                                <Row overrides={{marginTop:'10px'}}>
+                                    <Col width={10}><SubTextFontNormal size={14}>Only show sets which can be minted: </SubTextFontNormal></Col>
+                                    <Col width={3}><div 
+                                        style={{width:'20px', height:'20px', border:'solid white 0.5px', cursor: onlyMintableHover ?'pointer':'default', display:'flex', justifyContent:'center', alignItems:'center'}}
+                                        onClick={() => setOnlyMintable(!onlyMintable)}
+                                        onMouseEnter={() => setOnlyMintableHover(true)}
+                                        onMouseLeave={() => setOnlyMintableHover(false)}
+                                    >{onlyMintable && <div style={{width:'10px', height:'10px', backgroundColor:'green', borderRadius:'5px'}}></div>}</div></Col>
                                 </Row>
                             </Col>
                         </Row>
