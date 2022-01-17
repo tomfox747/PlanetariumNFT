@@ -55,11 +55,6 @@ const AuthenticatedMenu = () => {
                 <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'15px'}>NFT</SubTextFontMain></Col>
                 <Col width={40}/>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
-                    <Link style={{textDecoration:'none'}} to={"/home"}>
-                        <HeaderTextFontNormal size={16}>Home</HeaderTextFontNormal>
-                    </Link>
-                </Col>
-                <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/Explore"}>
                         <HeaderTextFontNormal size={16}>Explore</HeaderTextFontNormal>
                     </Link>
@@ -69,28 +64,15 @@ const AuthenticatedMenu = () => {
                         <HeaderTextFontNormal size={16}>My NFTs</HeaderTextFontNormal>
                     </Link>
                 </Col>
-                <Col width={windowSize.width > 1650 ? 10 : 25}>
-                    <Link style={{textDecoration:'none'}} to={"/About"}>
-                        <HeaderTextFontNormal size={16}>About</HeaderTextFontNormal>
-                    </Link>
-                </Col>
-                <Col width={windowSize.width > 1650 ? 10 : 25}>
-                    <Link style={{textDecoration:'none'}} to={"/Contact"}>
-                        <HeaderTextFontNormal size={16}>Contact</HeaderTextFontNormal>
-                    </Link>
-                </Col>
                 <ConnectionWidget account={address} auth={connectWallet}/>
                 <Col width={3}/>
             </Row>
             <Row>
                 <Switch>
                     <Route exact path="/"><NotConnected/></Route>
-                    <Route exact path="/home"></Route>
                     <Route exact path="/explore"><Explore/></Route>
                     <Route exact path="/nftset"><NftSet/></Route>
                     <Route exact path="/mynfts"><MyNfts/></Route>
-                    <Route exact path="/about"></Route>
-                    <Route exact path="/contact"></Route>
                 </Switch>
             </Row>
         </GridWrapper>

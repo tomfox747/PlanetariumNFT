@@ -218,6 +218,8 @@ const MintCard = ({nftSet}) => {
     const [mintPrice, setMintPrice] = useState(null)
     const [loading, setLoading] = useState(true)
 
+    console.log(nftSet)
+
     useEffect(() => {
         const f = async () => {
             setLoading(true)

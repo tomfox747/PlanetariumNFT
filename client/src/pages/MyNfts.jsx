@@ -77,7 +77,14 @@ const MyNfts = () => {
     const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const {Moralis, account} = useMoralis()
     const [loading, setLoading] = useState(true)
-    const [selectedTab, setSelectedTab] = useState(1)
+    const [selectedTab, setSelectedTab] = useState(
+        currentMarketplace.address === addresses.marketPlaces.Galaxy ? 1 :
+        currentMarketplace.address === addresses.marketPlaces.Star ? 2 :
+        currentMarketplace.address === addresses.marketPlaces.Planet ? 3 :
+        currentMarketplace.address === addresses.marketPlaces.Moon ? 4 :
+        currentMarketplace.address === addresses.marketPlaces.Constellation ? 5 :
+        6
+    )
     const [owned, setOwned] = useState([])
     const [filters, setFilters] = useState({})
     const Nfts = addresses.nfts
