@@ -46,7 +46,7 @@ const App = ({ isServerInfo }) => {
             <Router>
               <GridWrapper>
                 <MenuBar/>
-                <ToastContainer position="top-center" theme="dark"/>
+                <ToastContainer position="bottom-center" theme="dark"/>
               </GridWrapper>
             </Router>
           </MarketplaceStore.Provider>
