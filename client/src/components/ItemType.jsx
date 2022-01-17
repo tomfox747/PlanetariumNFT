@@ -129,17 +129,6 @@ const Item = ({nftSet, filters}) => {
     if(filters.onlyMintable === true && 100 - totalSupply === '0') return null
     if(filters.onlyForSale === true && available === '0') return null
 
-
-    if(loading === true) {
-        return(
-            <GridWrapper>
-                <Row>
-                    <Col><PuffLoader size={200} color={'#ffffff'}/></Col>
-                </Row>
-            </GridWrapper>
-        )
-    }
-
     return(
         <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px', paddingBottom:'10px', backgroundColor:'rgba(0, 0, 0, 0.5)', margin:'20px', border:'solid #6E76E5 0.5px'}}>
             <div>
@@ -191,11 +180,14 @@ const Item = ({nftSet, filters}) => {
 
 const Filters = ({setFilters}) => {
 
+    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const [nameValue, setNameValue] = useState('')
     const [onlyForSale, setOnlyForSale] = useState(false)
     const [onlyForSaleHover, setOnlyForSaleHover] = useState(false)
     const [onlyMintable, setOnlyMintable] = useState(false)
     const [onlyMintableHover, setOnlyMintableHover] = useState(false)
+
+    useEffect(() => {resetFilters()},[currentMarketplace])
 
     const onFilterSubmission = () => {
         setFilters({

@@ -1,4 +1,5 @@
 import React,{ useState, useEffect, useContext } from 'react'
+import {toast} from 'react-toastify'
 import {useMoralis} from 'react-moralis'
 import { useLocation } from 'react-router'
 import { GridWrapper, Row, Col } from '../components/shared/Grid'
@@ -168,6 +169,7 @@ const DataCard = ({data, nftSet}) => {
             }
         }
         await Moralis.executeFunction(options)
+        toast("Your purchase is being processed", {type:'info', autoClose:'10000'})
     }
 
     return(
@@ -218,8 +220,6 @@ const MintCard = ({nftSet}) => {
     const [mintPrice, setMintPrice] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    console.log(nftSet)
-
     useEffect(() => {
         const f = async () => {
             setLoading(true)
@@ -250,8 +250,12 @@ const MintCard = ({nftSet}) => {
             functionName: 'createToken',
             abi: currentMarketplace.nftConfig.abi,
             msgValue: mintPrice,
+            awaitReceipt: false
         }
-        await Moralis.executeFunction(options)
+        let tx = await Moralis.executeFunction(options)
+        tx.on("transactionHash", () => {
+            toast("Your token is being minted", {type:'info', autoClose:'10000', hideProgressBar:true})
+        })
     }
 
     if(loading === true) {

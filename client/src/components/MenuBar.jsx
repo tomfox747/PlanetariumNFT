@@ -1,6 +1,7 @@
 import React,{useContext, useEffect, useState} from 'react'
 import { Switch, Link, Route, useHistory} from 'react-router-dom'
 import { EthersStore } from 'context/EthersStore'
+import useEventSubscriptions from 'hooks/useEventSubscriptions'
 import {GridWrapper, Row, Col} from './shared/Grid'
 import ImageWrapper from './shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './shared/Text'
@@ -35,6 +36,8 @@ const AuthenticatedMenu = () => {
     const history = useHistory()
     const {address, connectWallet} = useContext(EthersStore)
     const {windowSize} = useContext(WindowSizeStore) 
+    useEventSubscriptions(address)
+
 
     useEffect(() => {
         if(address === null || address === undefined) {

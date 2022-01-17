@@ -25,22 +25,27 @@ const NotConnected = () => {
                     <Card overrides={{borderRadius:'20px'}}>
                         <Row overrides={{marginTop:'30px'}}>
                             <Col>
-                                <HeaderTextFontMain>Own A Piece Of The Universe</HeaderTextFontMain>
+                                <HeaderTextFontMain overrides={{margin:'10px', textAlign:'center'}} size={25}>Own A Piece Of The Universe</HeaderTextFontMain>
                             </Col> 
                         </Row>
-                        <Row overrides={{marginTop:'30px'}}>
+                        <Row overrides={{marginTop:'10px'}}>
                             <Col>
-                                <SubTextFontNormal size={'18px'}>Welcome To The Home Of Intergalactic NFTs</SubTextFontNormal>
+                                <SubTextFontNormal overrides={{margin:'10px', textAlign:'center'}} size={'18px'}>Welcome To The Home Of Intergalactic NFTs</SubTextFontNormal>
                             </Col> 
                         </Row>
-                        <Row overrides={{marginTop:'100px'}}>
+                        <Row overrides={{marginTop:'40px'}}>
                             <Col>
                                 <ImageWrapper imageName={'metaMask'} width={'200px'}/>
                             </Col>
                         </Row>
-                        <Row overrides={{marginTop:'50px', marginBottom:'50px'}}>
+                        <Row overrides={{marginTop:'30px'}}>
                             <Col>
-                                <Button text={"Connect"} func={funct}/>
+                                <Button overrides={{width:'250px'}} text={"Connect Metamask"} func={funct}/>
+                            </Col>
+                        </Row>
+                        <Row overrides={{marginTop:'10px', marginBottom:'20px'}}>
+                            <Col>
+                                <Button overrides={{backgroundColor:'red', width:'250px'}} text={"Connect To The Fuju Testnet"} func={funct}/>
                             </Col>
                         </Row>
                     </Card>

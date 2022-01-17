@@ -8,7 +8,7 @@ const MoonNftData = require('./moonNft/createNftSet')
 const ConstellationNftData = require('./constellationNft/createNftSet')
 const OtherNftData = require('./otherNft/createNftSet')
 
-const addresses = require('../contractAddresses_Fuji')
+const addresses = require('../contractAddresses_Fujiv2')
 
 const formatter = () => {
   console.log("")
@@ -28,38 +28,39 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
   
+  /*
   const GalaxyMarketplace = await hre.ethers.getContractFactory("GalaxyMarketplace");
-  const galaxyMarketplace = await GalaxyMarketplace.deploy(deployOverrides);
+  const galaxyMarketplace = await GalaxyMarketplace.deploy();
   await galaxyMarketplace.deployed();
 
   console.log("Galaxy marketplace deployed to:", galaxyMarketplace.address);
 
   const StarMarketplace = await hre.ethers.getContractFactory("StarMarketplace");
-  const starMarketplace = await StarMarketplace.deploy(deployOverrides);
+  const starMarketplace = await StarMarketplace.deploy();
   await starMarketplace.deployed();
 
   console.log("Star marketplace deployed to:", starMarketplace.address);
 
   const PlanetMarketplace = await hre.ethers.getContractFactory("PlanetMarketplace");
-  const planetMarketplace = await PlanetMarketplace.deploy(deployOverrides);
+  const planetMarketplace = await PlanetMarketplace.deploy();
   await planetMarketplace.deployed();
 
   console.log("Planet marketplace deployed to:", planetMarketplace.address);
 
   const MoonMarketplace = await hre.ethers.getContractFactory("MoonMarketplace");
-  const moonMarketplace = await MoonMarketplace.deploy(deployOverrides);
+  const moonMarketplace = await MoonMarketplace.deploy();
   await moonMarketplace.deployed();
 
   console.log("Moon marketplace deployed to:", moonMarketplace.address);
 
   const ConstellationMarketplace = await hre.ethers.getContractFactory("ConstellationMarketplace");
-  const constellationMarketplace = await ConstellationMarketplace.deploy(deployOverrides);
+  const constellationMarketplace = await ConstellationMarketplace.deploy();
   await constellationMarketplace.deployed();
 
   console.log("Constellation marketplace deployed to:", constellationMarketplace.address);
 
   const OtherMarketplace = await hre.ethers.getContractFactory("OtherMarketplace");
-  const otherMarketplace = await OtherMarketplace.deploy(deployOverrides);
+  const otherMarketplace = await OtherMarketplace.deploy();
   await otherMarketplace.deployed();
 
   console.log("Other marketplace deployed to:", otherMarketplace.address);
@@ -67,16 +68,34 @@ async function main() {
   console.log("completed")
 
   formatter()
+  */
 
+   //// create star nfts
+   let marketplace = await hre.ethers.getContractAt("StarMarketplace", addresses.marketPlaces.Star);
+
+   for(let i = 0; i < StarNftData.length; i++){
+     let item = StarNftData[1]
+     //string memory name, string memory symbol, address marketplaceAddress, string memory data, uint price
+     const StarNFT = await hre.ethers.getContractFactory('StarNFT');
+     const starNft = await StarNFT.deploy(item.name, item.symbol, addresses.marketPlaces.Star, JSON.stringify(item.data), "1000000000000000000");
+     await starNft.deployed();
+ 
+     console.log(item.name + " deployed to: " + starNft.address)
+ 
+     await marketplace.functions.createNew(starNft.address)
+     break
+   }
+
+   return
 
   ////// create galaxy nfts
-  let marketplace = await hre.ethers.getContractAt("GalaxyMarketplace", galaxyMarketplace.address);
+   marketplace = await hre.ethers.getContractAt("GalaxyMarketplace", addresses.marketPlaces.Galaxy);
 
   for(let i = 0; i < GalaxyNftData.length; i++){
     let item = GalaxyNftData[i]
     //string memory name, string memory symbol, address marketplaceAddress, string memory data, uint price
     const GalaxyNFT = await hre.ethers.getContractFactory('GalaxyNFT');
-    const galaxyNft = await GalaxyNFT.deploy(item.name, item.symbol, galaxyMarketplace.address, JSON.stringify(item.data), "1000000000000000000",deployOverrides);
+    const galaxyNft = await GalaxyNFT.deploy(item.name, item.symbol, addresses.marketPlaces.Galaxy, JSON.stringify(item.data), "1000000000000000000");
     await galaxyNft.deployed();
 
     console.log(item.name + " deployed to: " + galaxyNft.address)
@@ -88,7 +107,7 @@ async function main() {
   marketplace = await hre.ethers.getContractAt("StarMarketplace", addresses.marketPlaces.Star);
 
   for(let i = 0; i < StarNftData.length; i++){
-    let item = StarNftData[2]
+    let item = StarNftData[1]
     //string memory name, string memory symbol, address marketplaceAddress, string memory data, uint price
     const StarNFT = await hre.ethers.getContractFactory('StarNFT');
     const starNft = await StarNFT.deploy(item.name, item.symbol, addresses.marketPlaces.Star, JSON.stringify(item.data), "1000000000000000000");
@@ -101,7 +120,7 @@ async function main() {
   }
   
   //// create planet nfts
-  let marketplace = await hre.ethers.getContractAt("PlanetMarketplace", addresses.marketPlaces.Planet);
+  marketplace = await hre.ethers.getContractAt("PlanetMarketplace", addresses.marketPlaces.Planet);
   
   for(let i = 0; i < PlanetNftData.length; i++){
     let item = PlanetNftData[i]

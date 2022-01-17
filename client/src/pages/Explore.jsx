@@ -20,7 +20,7 @@ import ConstellationNFT from '../contracts/abis/ConstellationNFT'
 import OtherNFT from '../contracts/abis/OtherNFT'
 
 //import { addresses } from 'contracts/contractAddresses'
-import { addresses } from 'contracts/contractAddresses_Fuji'
+import { addresses } from 'contracts/contractAddresses_Fujiv2'
 
 const tabConfig = [
     {id: 1, text:'Galaxies'},
@@ -68,12 +68,12 @@ const Explore = () => {
 
     const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const[selectedTab, setSelectedTab] = useState(
-        currentMarketplace.address === addresses.marketPlaces.Galaxy ? 1 :
+        currentMarketplace.address === addresses.marketPlaces.Other ? 6 :
         currentMarketplace.address === addresses.marketPlaces.Star ? 2 :
         currentMarketplace.address === addresses.marketPlaces.Planet ? 3 :
         currentMarketplace.address === addresses.marketPlaces.Moon ? 4 :
         currentMarketplace.address === addresses.marketPlaces.Constellation ? 5 :
-        6
+        1
     )
 
     useEffect(() => {setCurrentMarketplace(marketplaceMapper[selectedTab])},[selectedTab])

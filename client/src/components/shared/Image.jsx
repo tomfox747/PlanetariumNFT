@@ -64,8 +64,8 @@ const ImageWrapper = ({overrides, width, imageName, maxHeight}) => {
     const [loading, setLoading] = useState(true)
 
     return(
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}>
-            {loading && <PuffLoader color={'#ffffff'} size={width}/>}
+        <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}>
+            {loading && <div style={{width:width, height:'auto', display:'flex', justifyContent:'center', alignItems:'center'}}><PuffLoader color={'#ffffff'} size={width}/></div>}
             <img src={mapping[imageName]} style={{width:width, height: loading === true ? '0px' : 'auto', maxHeight:maxHeight}} onLoad={() => setLoading(false)}/>
         </div>
     )

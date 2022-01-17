@@ -1,10 +1,11 @@
 import React,{useState, useContext} from 'react'
+import { toast } from 'react-toastify'
 import { PuffLoader } from 'react-spinners'
 import { GridWrapper, Row, Col } from 'components/shared/Grid'
 import Card from 'components/shared/Card'
 import { HeaderTextFontNormal, SubTextFontNormal, SubTextFontMain,  } from 'components/shared/Text'
 import Button from 'components/shared/Button'
-import { addresses } from '../contracts/contractAddresses_Fuji'
+import { addresses } from '../contracts/contractAddresses_Fujiv2'
 import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
 import {ethers} from 'ethers'
@@ -78,12 +79,12 @@ const MyNfts = () => {
     const {Moralis, account} = useMoralis()
     const [loading, setLoading] = useState(true)
     const [selectedTab, setSelectedTab] = useState(
-        currentMarketplace.address === addresses.marketPlaces.Galaxy ? 1 :
+        currentMarketplace.address === addresses.marketPlaces.Other ? 6 :
         currentMarketplace.address === addresses.marketPlaces.Star ? 2 :
         currentMarketplace.address === addresses.marketPlaces.Planet ? 3 :
         currentMarketplace.address === addresses.marketPlaces.Moon ? 4 :
         currentMarketplace.address === addresses.marketPlaces.Constellation ? 5 :
-        6
+        1
     )
     const [owned, setOwned] = useState([])
     const [filters, setFilters] = useState({})
@@ -232,6 +233,7 @@ const DataCard = ({data, filters}) => {
                 }
             }
             await Moralis.executeFunction(options)
+            toast("Your token is being listed", {type:'info', autoClose:'10000'})
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
@@ -247,7 +249,8 @@ const DataCard = ({data, filters}) => {
                     tokenId: data.id.toString()
                 }
             }
-        await Moralis.executeFunction(options)
+            await Moralis.executeFunction(options)
+            toast("Your token is being delisted", {type:'info', autoClose:'10000'})
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
@@ -265,6 +268,7 @@ const DataCard = ({data, filters}) => {
                 }
             }
             await Moralis.executeFunction(options)
+            toast("Your token price is being updated", {type:'info', autoClose:'10000'})
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
@@ -336,9 +340,12 @@ const DataCard = ({data, filters}) => {
 
 const Filters = ({setFilters}) => {
 
+    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
     const [nameValue, setNameValue] = useState('')
     const [onlyForSale, setOnlyForSale] = useState(false)
     const [onlyForSaleHover, setOnlyForSaleHover] = useState(false)
+
+    useEffect(() => {resetFilters()},[currentMarketplace])
 
     const onFilterSubmission = () => {
         setFilters({
