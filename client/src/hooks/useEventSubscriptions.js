@@ -22,6 +22,32 @@ const useEventSubscriptions = (account) => {
     useMoralisSubscription("MintedNFToumuamua", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully minted", {type:'success'})})
     useMoralisSubscription("MintedNFThalleyscomet", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully minted", {type:'success'})})
     useMoralisSubscription("MintedNFTholmberg", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully minted", {type:'success'})})
+
+    //purchase events
+    useMoralisSubscription("purchasedMilkyway", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedMessier", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedAndromeda", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedArcturus", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedFormalhaut", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedBetelguese", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedEarth", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedMars", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedSaturn", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedTheMoon", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedTitan", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedPhobos", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedOrion", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedCapricornus", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedScorpius", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedOumuamua", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedHalleysComet", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+    useMoralisSubscription("purchasedHolmberg", q => q.equalTo("sender", account), [], {onCreate: () => toast("Your NFT was successfully purchased", {type:'success'})})
+
+    //list events
+
+    //delist events
+
+    //update price events
 }
 
 export default useEventSubscriptions

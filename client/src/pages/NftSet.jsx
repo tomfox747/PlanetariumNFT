@@ -166,10 +166,13 @@ const DataCard = ({data, nftSet}) => {
             msgValue: data.price,
             params:{
                 tokenId: data.id
-            }
+            },
+            awaitReceipt: false
         }
-        await Moralis.executeFunction(options)
-        toast("Your purchase is being processed", {type:'info', autoClose:'10000'})
+        let tx = await Moralis.executeFunction(options)
+        tx.on("transactionHash", () => {
+            toast("Your purchase is being processed", {type:'info', autoClose:'10000', hideProgressBar:true})
+        })
     }
 
     return(
