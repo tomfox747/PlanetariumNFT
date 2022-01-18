@@ -24,7 +24,7 @@ export const addresses = {
             saturn:"0x56e7E5A333Ba12D3833dECe765b8613180D1391A",
         },
         Moons:{
-            themoon:"0x0ae0Bc12ac43893316FEf5f9cCE56E70b4b21E79",
+            moon:"0x0ae0Bc12ac43893316FEf5f9cCE56E70b4b21E79",
             titan:"0x3c977211aF8A193BaA1DC751Fd46407b5F300bd1",
             phobos:"0xbAa1AfF99A088b95D3AA7227025C4dC7D2C505e0",
         },
