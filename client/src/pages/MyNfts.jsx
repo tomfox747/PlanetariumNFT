@@ -91,6 +91,8 @@ const MyNfts = () => {
     const Nfts = addresses.nfts
     
     useEffect(() => {
+        let didCancel = false
+
         const f = async () => {
             setLoading(true)
             let NftSets = 
@@ -127,10 +129,13 @@ const MyNfts = () => {
                     })
                 }
             }
-            setOwned(results)
-            setLoading(false)
+            if(!didCancel){
+                setOwned(results)
+                setLoading(false)
+            }
         }
         f()
+        return(() => {didCancel = true})
     },[selectedTab])
 
     return(

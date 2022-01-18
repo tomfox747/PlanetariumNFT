@@ -41,6 +41,8 @@ const Data = ({filters}) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        let didCancel = false
+
         const main = async () =>{
             setLoading(true)
             let options = {
@@ -49,10 +51,13 @@ const Data = ({filters}) => {
                 abi: currentMarketplace.config.abi
             }
             const result = await Moralis.executeFunction(options)
-            setNftSets(result)
-            setLoading(false)
+            if(!didCancel){
+                setNftSets(result)
+                setLoading(false)
+            }
         }
         if(isWeb3Enabled && currentMarketplace.config) main()
+        return(() => {didCancel = true})
     },[currentMarketplace])
 
     if(loading === true) {
@@ -91,6 +96,8 @@ const Item = ({nftSet, filters}) => {
     const [buttonHover, setButtonHover] = useState(false)
 
     useEffect(() => {
+        let didCancel = false
+
         const f = async () => {
             setLoading(true)
             let getMetaData = {
@@ -111,12 +118,15 @@ const Item = ({nftSet, filters}) => {
             const getMetaDataResult = await Moralis.executeFunction(getMetaData)
             const getAvailableResult = await Moralis.executeFunction(getNumberAvailable)
             const totalSupplyResult = await Moralis.executeFunction(totalSupply)
-            setMetaData(JSON.parse(getMetaDataResult))
-            setAvailable(getAvailableResult)
-            setTotalSupply(totalSupplyResult)
-            setLoading(false)
+            if(!didCancel){
+                setMetaData(JSON.parse(getMetaDataResult))
+                setAvailable(getAvailableResult)
+                setTotalSupply(totalSupplyResult)
+                setLoading(false)
+            }
         }
         f()
+        return(() => {didCancel = true})
     },[nftSet, currentMarketplace])
 
     const copyToClipboard = () => {

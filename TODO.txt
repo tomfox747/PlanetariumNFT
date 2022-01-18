@@ -1,9 +1,5 @@
-add events to smart contracts
+add returns to useEffects with api calls
 
-connect to UI
+fix spelling mistakes in contracts and redeploy?
 
-add loading spinners
-
-animate between pages
-
-add background animation
+write white paper?

@@ -113,6 +113,8 @@ const NFTData = ({nftSet}) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        let didCancel = false
+
         const f = async () => {
             setLoading(true)
             let options = {
@@ -121,10 +123,13 @@ const NFTData = ({nftSet}) => {
                 abi: currentMarketplace.nftConfig.abi
             }
             const result = await Moralis.executeFunction(options)
-            setData(result)
-            setLoading(false)
+            if(!didCancel){
+                setData(result)
+                setLoading(false)
+            }
         }
         f()
+        return(() => didCancel = true)
     },[])
 
     if(loading === true) {
@@ -224,6 +229,8 @@ const MintCard = ({nftSet}) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        let didCancel = false
+
         const f = async () => {
             setLoading(true)
             let tokenCount = {
@@ -239,12 +246,15 @@ const MintCard = ({nftSet}) => {
             
             let tokenCountResult = await Moralis.executeFunction(tokenCount)    
             let priceResult = await Moralis.executeFunction(_price)
-            setTotalSupply(tokenCountResult)
-            setPrice(ethers.utils.formatEther(priceResult))
-            setMintPrice(priceResult)
-            setLoading(false)
+            if(!didCancel){
+                setTotalSupply(tokenCountResult)
+                setPrice(ethers.utils.formatEther(priceResult))
+                setMintPrice(priceResult)
+                setLoading(false)
+            }
         }
         f()
+        return(() => {didCancel = true})
     },[])
 
     const mint = async () => {
