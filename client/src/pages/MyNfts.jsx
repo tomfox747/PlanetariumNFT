@@ -227,20 +227,22 @@ const DataCard = ({data, filters}) => {
     }
 
     const listNft = async () => {
-        let options = {
-            contractAddress: currentMarketplace.nftAddresses[data.imageId],
-            functionName: 'listToken',
-            abi: currentMarketplace.nftConfig.abi,
-            params:{
-                tokenId: data.id.toString(),
-                value: ethers.utils.parseEther(salePrice)
-            },
-            awaitReceipt: false
-        }
-        let tx = await Moralis.executeFunction(options)
-        tx.on("transactionHash", () => {
-            toast("Your token is being listed", {type:'info', autoClose:'10000', hideProgressBar:true})
-        })
+        try{
+            let options = {
+                contractAddress: currentMarketplace.nftAddresses[data.imageId],
+                functionName: 'listToken',
+                abi: currentMarketplace.nftConfig.abi,
+                params:{
+                    tokenId: data.id.toString(),
+                    value: ethers.utils.parseEther(salePrice)
+                },
+                awaitReceipt: false
+            }
+            let tx = await Moralis.executeFunction(options)
+            tx.on("transactionHash", () => {
+                toast("Your token is being listed", {type:'info', autoClose:'10000', hideProgressBar:true})
+            })
+        }catch(e){}
     }
 
     const delistNft = async () => {
@@ -260,20 +262,22 @@ const DataCard = ({data, filters}) => {
     }
 
     const udpatePrice = async () => {
-        let options = {
-            contractAddress: currentMarketplace.nftAddresses[data.imageId],
-            functionName: 'setTokenPrice',
-            abi: currentMarketplace.nftConfig.abi,
-            params:{
-                tokenId: data.id.toString(),
-                newPrice: ethers.utils.parseEther(salePrice)
-            },
-            awaitReceipt: false
-        }
-        let tx = await Moralis.executeFunction(options)
-        tx.on("transactionHash", () => {
-            toast("Your token price is being updated", {type:'info', autoClose:'10000', hideProgressBar:true})
-        })
+        try{
+            let options = {
+                contractAddress: currentMarketplace.nftAddresses[data.imageId],
+                functionName: 'setTokenPrice',
+                abi: currentMarketplace.nftConfig.abi,
+                params:{
+                    tokenId: data.id.toString(),
+                    newPrice: ethers.utils.parseEther(salePrice)
+                },
+                awaitReceipt: false
+            }
+            let tx = await Moralis.executeFunction(options)
+            tx.on("transactionHash", () => {
+                toast("Your token price is being updated", {type:'info', autoClose:'10000', hideProgressBar:true})
+            })
+        }catch(e){}
     }
     return(
         <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>

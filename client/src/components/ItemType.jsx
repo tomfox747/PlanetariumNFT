@@ -9,8 +9,9 @@ import { useEffect } from 'react/cjs/react.development'
 import { useMoralis } from 'react-moralis'
 import { MarketplaceStore } from 'context/MarketplaceStore'
 import PuffLoader from 'react-spinners/PuffLoader'	
+import { toast } from 'react-toastify'
 
-const ItemType = ({type}) => {
+const ItemType = () => {
 
     const [filterObject, setFilterObject] = useState({})
 
@@ -131,7 +132,7 @@ const Item = ({nftSet, filters}) => {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(nftSet.nftAddress);
-        alert('Contract address copied to clipboard')
+        toast("NFT contract address copied to clipboard", {autoClose:'10000', type:'info'})
     }
 
     // filtering rules
@@ -190,7 +191,7 @@ const Item = ({nftSet, filters}) => {
 
 const Filters = ({setFilters}) => {
 
-    const {currentMarketplace, setCurrentMarketplace} = useContext(MarketplaceStore)
+    const {currentMarketplace} = useContext(MarketplaceStore)
     const [nameValue, setNameValue] = useState('')
     const [onlyForSale, setOnlyForSale] = useState(false)
     const [onlyForSaleHover, setOnlyForSaleHover] = useState(false)
