@@ -1,5 +1,5 @@
 import { useMoralisSubscription } from 'react-moralis'
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; 
 
 const useEventSubscriptions = (account) => {
 

@@ -276,12 +276,23 @@ const MintCard = ({nftSet}) => {
             <Row>
                 <Col>
                     <Card overrides={{alignItems:'flex-start'}}>
-                        <div style={{width:'100%'}}>
-                            <HeaderTextFontNormal size={20} overrides={{margin:'20px'}}>Mint New NFT</HeaderTextFontNormal>
-                            <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'20px', marginBottom:'0px'}}>{100 - totalSupply} of 100 Available to Mint</SubTextFontNormal>
-                            <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'5px'}}>Mint Price: {price} AVAX</SubTextFontNormal>
-                            <Button func={mint} overrides={{width:'250px',marginLeft:'20px', marginTop:'50px', marginBottom:'50px'}} text={'Mint NFT'}/>
-                        </div>
+                        {100 - totalSupply < 1 
+                            ? (
+                                <div style={{width:'100%'}}>
+                                    <HeaderTextFontNormal size={20} overrides={{margin:'20px'}}>All NFTs have been Minted</HeaderTextFontNormal>
+                                    <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'20px', marginBottom:'0px'}}>{100 - totalSupply} of 100 Available to Mint</SubTextFontNormal>
+                                    <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'5px', marginBottom:'50px'}}>Mint Price: {price} AVAX</SubTextFontNormal>
+                                </div>
+                            )
+                            : (
+                                <div style={{width:'100%'}}>
+                                    <HeaderTextFontNormal size={20} overrides={{margin:'20px'}}>Mint New NFT</HeaderTextFontNormal>
+                                    <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'20px', marginBottom:'0px'}}>{100 - totalSupply} of 100 Available to Mint</SubTextFontNormal>
+                                    <SubTextFontNormal size={16} overrides={{marginLeft:'20px', marginTop:'5px'}}>Mint Price: {price} AVAX</SubTextFontNormal>
+                                    <Button func={mint} overrides={{width:'250px',marginLeft:'20px', marginTop:'50px', marginBottom:'50px'}} text={'Mint NFT'}/>
+                                </div>
+                            )
+                        }
                     </Card>
                 </Col>
             </Row>

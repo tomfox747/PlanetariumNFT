@@ -222,65 +222,53 @@ const DataCard = ({data, filters}) => {
     }
 
     const listNft = async () => {
-        try{
-            let options = {
-                contractAddress: currentMarketplace.nftAddresses[data.imageId],
-                functionName: 'listToken',
-                abi: currentMarketplace.nftConfig.abi,
-                params:{
-                    tokenId: data.id.toString(),
-                    value: ethers.utils.parseEther(salePrice)
-                },
-                awaitReciept: false
-            }
-            let tx = await Moralis.executeFunction(options)
-            tx.on("transactionHash", () => {
-                toast("Your token is being listed", {type:'info', autoClose:'10000', hideProgressBar:true})
-            })
-        }catch(e){
-            alert("An error occured, please check the submitted information")
+        let options = {
+            contractAddress: currentMarketplace.nftAddresses[data.imageId],
+            functionName: 'listToken',
+            abi: currentMarketplace.nftConfig.abi,
+            params:{
+                tokenId: data.id.toString(),
+                value: ethers.utils.parseEther(salePrice)
+            },
+            awaitReceipt: false
         }
+        let tx = await Moralis.executeFunction(options)
+        tx.on("transactionHash", () => {
+            toast("Your token is being listed", {type:'info', autoClose:'10000', hideProgressBar:true})
+        })
     }
 
     const delistNft = async () => {
-        try{
-            let options = {
-                contractAddress: currentMarketplace.nftAddresses[data.imageId],
-                functionName: 'delistToken',
-                abi: currentMarketplace.nftConfig.abi,
-                params:{
-                    tokenId: data.id.toString()
-                },
-                awaitReciept: false
-            }
-            let tx = await Moralis.executeFunction(options)
-            tx.on("transactionHash", () => {
-                toast("Your token is being delisted", {type:'info', autoClose:'10000', hideProgressBar:true})
-            })
-        }catch(e){
-            alert("An error occured, please check the submitted information")
+        let options = {
+            contractAddress: currentMarketplace.nftAddresses[data.imageId],
+            functionName: 'delistToken',
+            abi: currentMarketplace.nftConfig.abi,
+            params:{
+                tokenId: data.id.toString()
+            },
+            awaitReceipt: false
         }
+        let tx = await Moralis.executeFunction(options)
+        tx.on("transactionHash", () => {
+            toast("Your token is being delisted", {type:'info', autoClose:'10000', hideProgressBar:true})
+        })
     }
 
     const udpatePrice = async () => {
-        try{
-            let options = {
-                contractAddress: currentMarketplace.nftAddresses[data.imageId],
-                functionName: 'setTokenPrice',
-                abi: currentMarketplace.nftConfig.abi,
-                params:{
-                    tokenId: data.id.toString(),
-                    newPrice: ethers.utils.parseEther(salePrice)
-                },
-                awaitReciept: false
-            }
-            let tx = await Moralis.executeFunction(options)
-            tx.on("transactionHash", () => {
-                toast("Your token price is being updated", {type:'info', autoClose:'10000', hideProgressBar:true})
-            })
-        }catch(e){
-            alert("An error occured, please check the submitted information")
+        let options = {
+            contractAddress: currentMarketplace.nftAddresses[data.imageId],
+            functionName: 'setTokenPrice',
+            abi: currentMarketplace.nftConfig.abi,
+            params:{
+                tokenId: data.id.toString(),
+                newPrice: ethers.utils.parseEther(salePrice)
+            },
+            awaitReceipt: false
         }
+        let tx = await Moralis.executeFunction(options)
+        tx.on("transactionHash", () => {
+            toast("Your token price is being updated", {type:'info', autoClose:'10000', hideProgressBar:true})
+        })
     }
     return(
         <GridWrapper overrides={{maxWidth:'400px', minWidth:'300px',border:'solid white 0.5px', borderRadius:'5px', margin:'30px', paddingBottom:'10px'}}>

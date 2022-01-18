@@ -16,7 +16,7 @@ export const addresses = {
         Stars:{
             arcturus:"0xc7AcEe91A49b4Cf190b2F1f26013B47F2573772e",
             formalhaut:"0xD4653a826F14068261792fadBed4c26E470f646C",
-            betelguese:"0x2D55FD2CD3295D542D7C8741da11e6ddfAFA5DCf"
+            betelgeuse:"0x2D55FD2CD3295D542D7C8741da11e6ddfAFA5DCf"
         },
         Planets:{
             earth:"0xc3C9F7F9ACaFE19C232355b1D7B5c2b4cfC2A0DE",
