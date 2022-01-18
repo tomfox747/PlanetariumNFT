@@ -230,10 +230,13 @@ const DataCard = ({data, filters}) => {
                 params:{
                     tokenId: data.id.toString(),
                     value: ethers.utils.parseEther(salePrice)
-                }
+                },
+                awaitReciept: false
             }
-            await Moralis.executeFunction(options)
-            toast("Your token is being listed", {type:'info', autoClose:'10000'})
+            let tx = await Moralis.executeFunction(options)
+            tx.on("transactionHash", () => {
+                toast("Your token is being listed", {type:'info', autoClose:'10000', hideProgressBar:true})
+            })
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
@@ -247,10 +250,13 @@ const DataCard = ({data, filters}) => {
                 abi: currentMarketplace.nftConfig.abi,
                 params:{
                     tokenId: data.id.toString()
-                }
+                },
+                awaitReciept: false
             }
-            await Moralis.executeFunction(options)
-            toast("Your token is being delisted", {type:'info', autoClose:'10000'})
+            let tx = await Moralis.executeFunction(options)
+            tx.on("transactionHash", () => {
+                toast("Your token is being delisted", {type:'info', autoClose:'10000', hideProgressBar:true})
+            })
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
@@ -265,10 +271,13 @@ const DataCard = ({data, filters}) => {
                 params:{
                     tokenId: data.id.toString(),
                     newPrice: ethers.utils.parseEther(salePrice)
-                }
+                },
+                awaitReciept: false
             }
-            await Moralis.executeFunction(options)
-            toast("Your token price is being updated", {type:'info', autoClose:'10000'})
+            let tx = await Moralis.executeFunction(options)
+            tx.on("transactionHash", () => {
+                toast("Your token price is being updated", {type:'info', autoClose:'10000', hideProgressBar:true})
+            })
         }catch(e){
             alert("An error occured, please check the submitted information")
         }
