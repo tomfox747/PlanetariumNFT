@@ -145,9 +145,9 @@ const Item = ({nftSet, filters}) => {
             <div>
                 <Row>
                     <Col>
-                        <div style={{maxHeight:'200px', minHeight:'200px', overflow:'hidden'}}>
+                        <Row overrides={{maxHeight:'200px', minHeight:'200px', overflow:'hidden'}}>
                             <ImageWrapper imageName={metaData.imageId} width={300}/>
-                        </div>
+                        </Row>
                         <Row>
                             <Col width={1}/>
                             <Col width={30}>
@@ -156,7 +156,7 @@ const Item = ({nftSet, filters}) => {
                                     <HeaderTextFontNormal size={18}>{metaData.name}</HeaderTextFontNormal>
                                 </div>
                                 <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
-                                    <SubTextFontNormal size={14}>Available For Purchase: {available}/100</SubTextFontNormal>    
+                                    <SubTextFontNormal size={14}>Available For Purchase: {available}/100</SubTextFontNormal>
                                 </div>
                                 <div style={{marginTop:'10px',width:'100%', display:'flex', justifyContent:'flex-start'}}>
                                     <SubTextFontNormal size={14}>Available To Mint {100 - totalSupply}/100</SubTextFontNormal>

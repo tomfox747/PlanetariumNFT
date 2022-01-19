@@ -59,13 +59,13 @@ const mapping  = {
     'holmberg15a': Holmberg15a,
 }
 
-const ImageWrapper = ({overrides, width, imageName, maxHeight}) => {
+const ImageWrapper = ({overrides, width, imageName, maxHeight, loaderSize = 50}) => {
 
     const [loading, setLoading] = useState(true)
 
     return(
         <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',width:'100%', height:'100%',...overrides}}>
-            {loading && <div style={{width:width, height:'auto', display:'flex', justifyContent:'center', alignItems:'center'}}><PuffLoader color={'#ffffff'} size={width}/></div>}
+            {loading && <div style={{ width:width, height:'auto', display:'flex', justifyContent:'center', alignItems:'center'}}><PuffLoader color={'#ffffff'} size={loaderSize}/></div>}
             <img src={mapping[imageName]} style={{width:width, height: loading === true ? '0px' : 'auto', maxHeight:maxHeight}} onLoad={() => setLoading(false)}/>
         </div>
     )

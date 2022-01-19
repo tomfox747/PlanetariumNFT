@@ -1,4 +1,2 @@
-add toaster for copied address
-
 fix spelling mistakes in contracts and redeploy?
 write white paper?
