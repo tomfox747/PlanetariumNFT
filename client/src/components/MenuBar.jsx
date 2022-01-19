@@ -6,6 +6,7 @@ import {GridWrapper, Row, Col} from './shared/Grid'
 import ImageWrapper from './shared/Image'
 import {HeaderTextFontMain, HeaderTextFontNormal, SubTextFontMain} from './shared/Text'
 import { WindowSizeStore } from 'context/WindowSizeStore'
+import Button from './shared/Button'
 
 import Explore from 'pages/Explore'
 import NotConnected from 'pages/NotConnected'
@@ -47,6 +48,10 @@ const AuthenticatedMenu = () => {
         else{history.push('/explore')}
     },[address, history])
 
+    const gotoWhitepaper = () => {
+        window.location.href = 'https://pdfhost.io/v/drw00.IvY_Planetarium_White_Paper'
+    }
+
     return(
         <GridWrapper >
             <Row overrides={{paddingTop:'10px',paddingBottom:'10px',backgroundColor:'black', height:'80px'}}>
@@ -56,7 +61,7 @@ const AuthenticatedMenu = () => {
                 <Col width={7}><HeaderTextFontMain size={27}>Planetarium</HeaderTextFontMain></Col>
                 <Col width={1}/>
                 <Col width={5} overrides={{border:'solid white 1px', borderRadius:'5px'}}><SubTextFontMain size={'15px'}>NFT</SubTextFontMain></Col>
-                <Col width={40}/>
+                <Col width={30}/>
                 <Col width={windowSize.width > 1650 ? 10 : 25}>
                     <Link style={{textDecoration:'none'}} to={"/Explore"}>
                         <HeaderTextFontNormal size={16}>Explore</HeaderTextFontNormal>
@@ -66,6 +71,9 @@ const AuthenticatedMenu = () => {
                     <Link style={{textDecoration:'none'}} to={"/MyNfts"}>
                         <HeaderTextFontNormal size={16}>My NFTs</HeaderTextFontNormal>
                     </Link>
+                </Col>
+                <Col width={5} overrides={{marginRight:'10px'}}>
+                    <Button text={"WhitePaper"} func={gotoWhitepaper} overrides={{width:'100px'}}/>
                 </Col>
                 <ConnectionWidget account={address} auth={connectWallet}/>
                 <Col width={3}/>
