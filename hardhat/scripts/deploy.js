@@ -28,7 +28,6 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
   
-  /*
   const GalaxyMarketplace = await hre.ethers.getContractFactory("GalaxyMarketplace");
   const galaxyMarketplace = await GalaxyMarketplace.deploy();
   await galaxyMarketplace.deployed();
@@ -68,7 +67,6 @@ async function main() {
   console.log("completed")
 
   formatter()
-  */
 
    //// create star nfts
    let marketplace = await hre.ethers.getContractAt("StarMarketplace", addresses.marketPlaces.Star);
